@@ -59,3 +59,16 @@ Angular CLI does not come with an end-to-end testing framework by default. You c
 ## Additional Resources
 
 For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+
+
+TO DO items
+
+1 ) DAtepicker below Wor Orders
+Timescale month
+2) CLick on individual boxes to highlight .
+3) In progress ... should be able to edit or delete alomg with hover items
+4) Correct Drop shadow when you click on the create work order and its respectivve styles
+5) CHeck the styles of open , in progress and complete
+6) on click of the form elemts the datepicker should pop up
+
+Inspect the sketch and add the right color codes
