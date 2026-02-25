@@ -63,7 +63,7 @@ For more information on using the Angular CLI, including detailed command refere
 
 TO DO items
 
-1 ) DAtepicker below Wor Orders
+1) Datepicker below Wor Orders
 Timescale month
 2) CLick on individual boxes to highlight .
 3) In progress ... should be able to edit or delete alomg with hover items
