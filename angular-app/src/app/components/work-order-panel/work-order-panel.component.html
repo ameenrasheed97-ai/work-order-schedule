@@ -1,0 +1,121 @@
+<div class="panel-overlay" [class.active]="isOpen" (click)="onOverlayClick($event)">
+  <div class="panel" [class.open]="isOpen" role="dialog" aria-modal="true">
+
+    <!-- Panel header bar -->
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <h2 class="panel-title">{{ title }}</h2>
+        <p class="panel-subtitle">{{ subtitle }}</p>
+      </div>
+      <div class="panel-header-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()">Cancel</button>
+        <button type="button" class="btn-create" (click)="onSubmit()">{{ submitLabel }}</button>
+      </div>
+    </div>
+
+    <!-- Panel body / form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="panel-body" novalidate>
+
+      <!-- Work Order Name -->
+      <div class="form-field">
+        <label class="form-label">Work Order Name</label>
+        <input
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('name')"
+          formControlName="name"
+          placeholder="e.g. McMarrow Distribution"
+          autocomplete="off"
+        />
+        <span class="form-error" *ngIf="isInvalid('name')">Name is required</span>
+      </div>
+
+      <!-- Status -->
+      <div class="form-field">
+        <label class="form-label">Status</label>
+        <ng-select
+          formControlName="status"
+          [items]="statusOptions"
+          bindValue="value"
+          bindLabel="label"
+          [clearable]="false"
+          [searchable]="false"
+          class="status-select"
+          placeholder="Select status"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <span class="status-pill"
+              [style.color]="item.color"
+              [style.background]="item.color + '20'">
+              {{ item.label }}
+            </span>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <span class="status-pill"
+              [style.color]="item.color"
+              [style.background]="item.color + '20'">
+              {{ item.label }}
+            </span>
+          </ng-template>
+        </ng-select>
+        <span class="form-error" *ngIf="isInvalid('status')">Status is required</span>
+      </div>
+
+      <!-- End Date -->
+      <div class="form-field">
+        <label class="form-label">End date</label>
+        <input
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('endDate')"
+          formControlName="endDate"
+          placeholder="MM.DD.YYYY"
+          autocomplete="off"
+        />
+        <span class="form-error"
+          *ngIf="isInvalid('endDate') && form.get('endDate')?.errors?.['required']">
+          End date is required
+        </span>
+        <span class="form-error"
+          *ngIf="isInvalid('endDate') && form.get('endDate')?.errors?.['dateFormat']">
+          Format must be MM.DD.YYYY
+        </span>
+        <span class="form-error"
+          *ngIf="form.errors?.['dateRange'] && form.get('endDate')?.touched">
+          End date must be after start date
+        </span>
+      </div>
+
+      <!-- Start Date -->
+      <div class="form-field">
+        <label class="form-label">Start date</label>
+        <input
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('startDate')"
+          formControlName="startDate"
+          placeholder="MM.DD.YYYY"
+          autocomplete="off"
+        />
+        <span class="form-error"
+          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['required']">
+          Start date is required
+        </span>
+        <span class="form-error"
+          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['dateFormat']">
+          Format must be MM.DD.YYYY
+        </span>
+      </div>
+
+      <!-- Overlap error -->
+      <div class="overlap-error" *ngIf="overlapError">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+          <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M7 4.5v3M7 9.5v.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        This work order overlaps with an existing one on the same work center.
+      </div>
+
+    </form>
+  </div>
+</div>

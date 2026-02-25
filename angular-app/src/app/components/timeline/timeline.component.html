@@ -1,0 +1,159 @@
+<div class="timeline-wrapper">
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <h1 class="page-title">Work Orders</h1>
+    <div class="toolbar-controls">
+      <button class="btn-today" (click)="scrollToToday()">
+        <svg width="12" height="12" viewBox="0 0 12 12" fill="none">
+          <rect x="1" y="1.5" width="10" height="9.5" rx="1.5" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M1 5h10" stroke="currentColor" stroke-width="1.2"/>
+          <path d="M3.5 1v1.5M8.5 1v1.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+        </svg>
+        Today
+      </button>
+      <div class="timescale-control">
+        <span class="timescale-label">Timescale</span>
+        <ng-select
+          [items]="zoomOptions"
+          bindValue="value"
+          bindLabel="label"
+          [clearable]="false"
+          [searchable]="false"
+          [ngModel]="zoomLevel()"
+          (ngModelChange)="onZoomChange($event)"
+          class="timescale-select"
+        ></ng-select>
+      </div>
+    </div>
+  </div>
+
+  <!-- Grid -->
+  <div class="grid-container">
+
+    <!-- Left fixed panel -->
+    <div class="left-panel">
+      <div class="left-header">Work Center</div>
+      <div
+        *ngFor="let wc of workCenters(); trackBy: trackByDocId"
+        class="left-row"
+        [class.hovered]="hoveredWorkCenterId === wc.docId"
+        (mouseenter)="hoveredWorkCenterId = wc.docId"
+        (mouseleave)="hoveredWorkCenterId = null"
+      >
+        <span class="wc-name">{{ wc.data.name }}</span>
+      </div>
+    </div>
+
+    <!-- Scrollable timeline -->
+    <div class="scroll-container" #scrollContainer>
+      <div class="timeline-inner" [style.width.px]="totalTimelineWidth">
+
+        <!-- Header -->
+        <div class="timeline-header">
+          <div
+            *ngFor="let col of columns; trackBy: trackByDate"
+            class="header-cell"
+            [class.current-col]="isCurrentPeriod(col)"
+            [style.width.px]="COLUMN_WIDTH"
+          >
+            <span class="current-badge" *ngIf="isCurrentPeriod(col)">
+              Current {{ zoomLevel() === 'day' ? 'day' : zoomLevel() === 'week' ? 'week' : 'month' }}
+            </span>
+            <span class="header-cell-label">{{ formatColumn(col) }}</span>
+          </div>
+        </div>
+
+        <!-- Today vertical line -->
+        <div class="today-line" [style.left.px]="todayLineLeft"></div>
+
+        <!-- Work center rows -->
+        <div
+          *ngFor="let wc of workCenters(); trackBy: trackByDocId"
+          class="timeline-row"
+          [class.hovered]="hoveredWorkCenterId === wc.docId"
+          [style.height.px]="ROW_HEIGHT"
+          (mouseenter)="hoveredWorkCenterId = wc.docId"
+          (mouseleave)="hoveredWorkCenterId = null"
+          (click)="onTimelineClick($event, wc)"
+        >
+          <!-- Column backgrounds -->
+          <div
+            *ngFor="let col of columns; trackBy: trackByDate"
+            class="row-cell"
+            [style.width.px]="COLUMN_WIDTH"
+          ></div>
+
+          <!-- Hover hint -->
+          <div class="add-hint" *ngIf="hoveredWorkCenterId === wc.docId && getBarsForCenter(wc.docId).length === 0">
+            <span>Click to add dates</span>
+          </div>
+
+          <!-- Work order bars -->
+          <div
+            *ngFor="let bar of getBarsForCenter(wc.docId); trackBy: trackByBar"
+            class="work-order-bar status-{{ bar.workOrder.data.status }}"
+            [style.left.px]="bar.left"
+            [style.width.px]="bar.width"
+            (mouseenter)="showTooltip($event, bar.workOrder)"
+            (mousemove)="moveTooltip($event)"
+            (mouseleave)="hideTooltip()"
+            (click)="$event.stopPropagation()"
+          >
+            <span class="bar-name">{{ bar.workOrder.data.name }}</span>
+            <span class="bar-badge">{{ getStatusLabel(bar.workOrder.data.status) }}</span>
+
+            <!-- Three-dot menu -->
+            <div class="actions-menu" (click)="toggleDropdown($event, bar.workOrder.docId)">
+              <button
+                class="actions-btn"
+                [class.active]="openDropdownId === bar.workOrder.docId"
+                aria-label="Actions"
+              >···</button>
+              <div class="dropdown-menu" [class.open]="openDropdownId === bar.workOrder.docId">
+                <button class="dropdown-item" (click)="openEdit(bar.workOrder)">Edit</button>
+                <button class="dropdown-item delete" (click)="deleteWorkOrder(bar.workOrder.docId)">Delete</button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Tooltip -->
+  <div
+    class="tooltip"
+    [class.visible]="tooltip.visible"
+    [style.left.px]="tooltip.x"
+    [style.top.px]="tooltip.y"
+    *ngIf="tooltip.workOrder"
+  >
+    <div class="tooltip-name">{{ tooltip.workOrder.data.name }}</div>
+    <div class="tooltip-row">
+      <span class="tooltip-label">Status</span>
+      <span class="tooltip-badge status-{{ tooltip.workOrder.data.status }}">{{ getStatusLabel(tooltip.workOrder.data.status) }}</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label">Start</span>
+      <span>{{ formatDate(tooltip.workOrder.data.startDate) }}</span>
+    </div>
+    <div class="tooltip-row">
+      <span class="tooltip-label">End</span>
+      <span>{{ formatDate(tooltip.workOrder.data.endDate) }}</span>
+    </div>
+  </div>
+
+</div>
+
+<!-- Slide-out panel -->
+<app-work-order-panel
+  [isOpen]="isPanelOpen"
+  [mode]="panelMode"
+  [workOrder]="editingWorkOrder"
+  [prefilledDate]="panelPrefilledDate"
+  [workCenterId]="panelWorkCenterId"
+  (closed)="closePanel()"
+  (saved)="onSaved()"
+></app-work-order-panel>

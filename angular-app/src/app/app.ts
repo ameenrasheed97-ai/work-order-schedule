@@ -1,11 +1,13 @@
-import { Component, signal } from '@angular/core';
+import { Component } from '@angular/core';
+import { TimelineComponent } from './components/timeline/timeline.component';
 
 @Component({
   selector: 'app-root',
-  imports: [],
-  templateUrl: './app.html',
-  styleUrl: './app.css'
+  standalone: true,
+  imports: [TimelineComponent],
+  template: `<app-timeline></app-timeline>`,
+  styles: [`
+    :host { display: block; height: 100vh; }
+  `]
 })
-export class App {
-  protected readonly title = signal('angular-app');
-}
+export class AppComponent {}
