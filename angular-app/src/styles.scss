@@ -12,29 +12,42 @@ html, body {
   -webkit-font-smoothing: antialiased;
 }
 
+// ─── Global ng-select dropdown panel ────────────────────────
 .ng-dropdown-panel {
   background: #fff !important;
   border: 1px solid #e5e7eb !important;
   border-radius: 8px !important;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1) !important;
-  margin-top: 4px;
-  font-family: "Circular-Std", sans-serif;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+  margin-top: 4px !important;
   padding: 4px !important;
+  font-family: "Circular-Std", sans-serif;
+
+  .ng-dropdown-panel-items {
+    border-radius: 6px;
+    overflow: hidden;
+  }
 
   .ng-option {
     background: transparent !important;
     color: #374151 !important;
-    font-size: 13px;
-    padding: 8px 12px;
-    border-radius: 5px;
-    font-family: "Circular-Std", sans-serif;
+    font-size: 13px !important;
+    font-family: "Circular-Std", sans-serif !important;
+    padding: 8px 12px !important;
+    border-radius: 5px !important;
+    transition: background 0.1s;
 
     &.ng-option-marked  { background: #f3f4f6 !important; }
-    &.ng-option-selected { background: #eef2ff !important; color: #4338ca !important; }
-    &:hover { background: #f3f4f6 !important; }
+    &.ng-option-selected {
+      background: #eef2ff !important;
+      color: #4338ca !important;
+      font-weight: 600 !important;
+    }
   }
 }
 
-.timescale-select .ng-dropdown-panel {
-  min-width: 120px;
+// Status dropdown in panel — options with colored pills
+.status-select .ng-dropdown-panel {
+  .ng-option {
+    padding: 6px 10px !important;
+  }
 }

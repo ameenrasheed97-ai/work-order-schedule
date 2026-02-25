@@ -4,19 +4,18 @@
   height: 100%;
   background: #fff;
   font-family: "Circular-Std", -apple-system, sans-serif;
-  color: #1a1a2e;
 }
 
+// ─── Toolbar ─────────────────────────────────────────────────
 .toolbar {
   display: flex;
   align-items: center;
-  padding: 28px 32px 16px;
-  gap: 12px;
+  padding: 24px 28px 14px;
   flex-shrink: 0;
 }
 
 .page-title {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   color: #111827;
   margin: 0;
@@ -29,76 +28,99 @@
   gap: 8px;
 }
 
+// "Today" button - matches design pill
 .btn-today {
   display: flex;
   align-items: center;
   gap: 5px;
-  height: 30px;
-  padding: 0 12px;
-  background: #f3f4f6;
+  height: 32px;
+  padding: 0 14px;
+  background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   font-family: "Circular-Std", sans-serif;
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 500;
   color: #374151;
   cursor: pointer;
-  transition: all 0.15s;
-  &:hover { background: #e5e7eb; }
+  transition: background 0.12s, border-color 0.12s;
+
+  &:hover {
+    background: #f9fafb;
+    border-color: #d1d5db;
+  }
 }
 
+// "Timescale | Day ▼" combined pill — matches design exactly
 .timescale-control {
   display: flex;
   align-items: center;
+  height: 32px;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
-  height: 30px;
   overflow: visible;
+  background: #fff;
 }
 
 .timescale-label {
-  padding: 0 10px;
-  font-size: 12px;
+  padding: 0 12px;
+  font-size: 13px;
+  font-weight: 400;
   color: #6b7280;
   white-space: nowrap;
   border-right: 1px solid #e5e7eb;
   height: 100%;
   display: flex;
   align-items: center;
+  flex-shrink: 0;
+}
+
+.timescale-divider {
+  // handled by border-right on label
+  display: none;
 }
 
 .timescale-select {
-  min-width: 90px;
+  min-width: 80px;
 
+  // Force ng-select to look like a plain text dropdown
   .ng-select-container {
-    height: 28px !important;
-    min-height: 28px !important;
+    height: 30px !important;
+    min-height: 30px !important;
     border: none !important;
     border-radius: 0 5px 5px 0 !important;
     background: transparent !important;
     font-family: "Circular-Std", sans-serif !important;
-    font-size: 12px !important;
+    font-size: 13px !important;
     font-weight: 600 !important;
-    color: #5b5fc7 !important;
+    color: #111827 !important;
     box-shadow: none !important;
-    padding-left: 8px;
+    cursor: pointer;
   }
 
-  .ng-value-label { color: #5b5fc7 !important; font-weight: 600; }
-  .ng-arrow { border-color: #5b5fc7 transparent transparent !important; }
+  .ng-value-container { padding-left: 10px !important; }
+  .ng-value-label { color: #111827 !important; font-weight: 600 !important; font-size: 13px !important; }
+  .ng-arrow-wrapper { padding-right: 8px !important; }
+  .ng-arrow { border-color: #6b7280 transparent transparent !important; border-width: 4px 3px 0 !important; }
+
+  &.ng-select-opened .ng-arrow {
+    border-color: transparent transparent #6b7280 !important;
+  }
 }
 
+// ─── Grid container ──────────────────────────────────────────
 .grid-container {
   display: flex;
   flex: 1;
   overflow: hidden;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  margin: 0 32px 24px;
+  margin: 0 28px 24px;
 }
 
+// ─── Left panel ──────────────────────────────────────────────
 .left-panel {
-  width: 240px;
+  width: 220px;
   flex-shrink: 0;
   border-right: 1px solid #e5e7eb;
   background: #fff;
@@ -125,7 +147,7 @@
   align-items: center;
   padding: 0 20px;
   border-bottom: 1px solid #f3f4f6;
-  transition: background 0.12s;
+  transition: background 0.1s;
   &.hovered { background: #f5f5ff; }
 }
 
@@ -138,6 +160,7 @@
   text-overflow: ellipsis;
 }
 
+// ─── Scroll area ─────────────────────────────────────────────
 .scroll-container {
   flex: 1;
   overflow-x: auto;
@@ -154,6 +177,7 @@
   min-height: 100%;
 }
 
+// ─── Column header ───────────────────────────────────────────
 .timeline-header {
   display: flex;
   height: 44px;
@@ -170,19 +194,23 @@
   flex-direction: column;
   align-items: center;
   justify-content: flex-end;
+  padding-bottom: 7px;
   font-size: 11px;
   font-weight: 400;
   color: #9ca3af;
   border-right: 1px solid #f3f4f6;
-  padding: 0 4px 8px;
   text-align: center;
   position: relative;
-  &.current-col { color: #374151; font-weight: 500; }
+
+  &.current-col {
+    color: #111827;
+    font-weight: 600;
+  }
 }
 
 .current-badge {
   position: absolute;
-  top: 4px;
+  top: 5px;
   left: 50%;
   transform: translateX(-50%);
   font-size: 9px;
@@ -192,19 +220,26 @@
   border-radius: 4px;
   padding: 1px 6px;
   white-space: nowrap;
+  line-height: 1.6;
 }
 
+.header-cell-label {
+  line-height: 1;
+}
+
+// ─── Today line ──────────────────────────────────────────────
 .today-line {
   position: absolute;
   top: 44px;
   bottom: 0;
   width: 1px;
   background: #5b5fc7;
-  opacity: 0.35;
+  opacity: 0.4;
   z-index: 4;
   pointer-events: none;
 }
 
+// ─── Rows ────────────────────────────────────────────────────
 .timeline-row {
   display: flex;
   position: relative;
@@ -220,12 +255,10 @@
   border-right: 1px solid #f3f4f6;
 }
 
+// "Click to add dates" hint
 .add-hint {
   position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  left: 0;
-  right: 0;
+  inset: 0;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -238,55 +271,72 @@
     color: #fff;
     font-size: 11px;
     font-weight: 500;
-    padding: 5px 10px;
-    border-radius: 6px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    padding: 4px 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     white-space: nowrap;
   }
 }
 
 .timeline-row.hovered .add-hint { opacity: 1; }
 
+// ─── Work order bars ─────────────────────────────────────────
 .work-order-bar {
   position: absolute;
-  top: 8px;
-  bottom: 8px;
-  border-radius: 6px;
+  top: 7px;
+  bottom: 7px;
+  border-radius: 5px;
   display: flex;
   align-items: center;
-  padding: 0 10px;
-  gap: 8px;
+  padding: 0 8px 0 10px;
+  gap: 6px;
   cursor: pointer;
   z-index: 3;
   overflow: hidden;
-  animation: barIn 0.25s ease both;
+  animation: barIn 0.2s ease both;
   transition: box-shadow 0.15s;
+  min-width: 30px;
 
-  &:hover { box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+  &:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
 
+  // Status themes — match the pastel Naologic design
   &.status-open {
     background: #eef2ff;
-    .bar-name { color: #4338ca; }
+    .bar-name  { color: #4338ca; }
     .bar-badge { background: #e0e7ff; color: #4338ca; }
     .actions-btn { color: #6366f1; }
   }
   &.status-in-progress {
     background: #eef2ff;
-    .bar-name { color: #4338ca; }
+    .bar-name  { color: #4338ca; }
     .bar-badge { background: #e0e7ff; color: #4338ca; }
     .actions-btn { color: #6366f1; }
   }
   &.status-complete {
     background: #f0fdf4;
-    .bar-name { color: #15803d; }
-    .bar-badge { background: #dcfce7; color: #16a34a; }
+    .bar-name  { color: #15803d; }
+    .bar-badge { background: #dcfce7; color: #15803d; }
     .actions-btn { color: #16a34a; }
   }
   &.status-blocked {
     background: #fffbeb;
-    .bar-name { color: #92400e; }
+    .bar-name  { color: #92400e; }
     .bar-badge { background: #fef3c7; color: #d97706; }
     .actions-btn { color: #d97706; }
+  }
+
+  // When the bar is narrow, hide name and show only badge
+  &.narrow {
+    padding: 0 6px;
+
+    .bar-name { display: none; }
+
+    .bar-badge {
+      font-size: 10px;
+      padding: 1px 5px;
+    }
+
+    .actions-menu { display: none; }
   }
 }
 
@@ -315,11 +365,15 @@
   text-transform: capitalize;
 }
 
-.actions-menu { position: relative; flex-shrink: 0; }
+// ─── Three-dot menu ──────────────────────────────────────────
+.actions-menu {
+  position: relative;
+  flex-shrink: 0;
+}
 
 .actions-btn {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border: none;
   background: transparent;
   border-radius: 4px;
@@ -327,11 +381,13 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  letter-spacing: 1px;
   font-size: 13px;
   font-weight: 700;
+  letter-spacing: 0.5px;
   padding: 0;
   transition: background 0.1s;
+  line-height: 1;
+
   &:hover, &.active { background: rgba(0,0,0,0.08); }
 }
 
@@ -339,13 +395,13 @@
   position: absolute;
   top: calc(100% + 2px);
   right: 0;
-  width: 120px;
+  width: 110px;
   background: #fff;
   border: 1px solid #e5e7eb;
-  border-radius: 8px;
+  border-radius: 7px;
   box-shadow: 0 4px 16px rgba(0,0,0,0.1);
   z-index: 200;
-  padding: 4px;
+  padding: 3px;
   opacity: 0;
   transform: translateY(-4px) scale(0.97);
   pointer-events: none;
@@ -361,12 +417,11 @@
 .dropdown-item {
   display: flex;
   align-items: center;
-  gap: 7px;
   width: 100%;
   padding: 7px 10px;
   border: none;
   background: transparent;
-  border-radius: 5px;
+  border-radius: 4px;
   font-family: "Circular-Std", sans-serif;
   font-size: 13px;
   color: #374151;
@@ -377,33 +432,35 @@
   &.delete { color: #ef4444; &:hover { background: #fef2f2; } }
 }
 
+// ─── Tooltip ─────────────────────────────────────────────────
 .tooltip {
   position: fixed;
   z-index: 3000;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 8px;
-  padding: 10px 12px;
+  padding: 10px 13px;
   box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-  min-width: 170px;
+  min-width: 175px;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.15s;
+  transition: opacity 0.12s;
   &.visible { opacity: 1; }
 }
 
-.tooltip-name { font-size: 12px; font-weight: 600; color: #111827; margin-bottom: 6px; }
+.tooltip-name { font-size: 12px; font-weight: 600; color: #111827; margin-bottom: 7px; }
 
 .tooltip-row {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   font-size: 11px;
   color: #6b7280;
-  margin-top: 3px;
+  margin-top: 4px;
   gap: 12px;
 }
 
-.tooltip-label { color: #9ca3af; }
+.tooltip-label { color: #9ca3af; font-size: 10px; }
 
 .tooltip-badge {
   font-size: 10px;
@@ -412,8 +469,7 @@
   border-radius: 4px;
   text-transform: capitalize;
 
-  &.status-open        { background: #e0e7ff; color: #4338ca; }
-  &.status-in-progress { background: #e0e7ff; color: #4338ca; }
+  &.status-open, &.status-in-progress { background: #e0e7ff; color: #4338ca; }
   &.status-complete    { background: #dcfce7; color: #15803d; }
   &.status-blocked     { background: #fef3c7; color: #d97706; }
 }

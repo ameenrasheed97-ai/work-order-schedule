@@ -14,6 +14,7 @@
       </button>
       <div class="timescale-control">
         <span class="timescale-label">Timescale</span>
+        <span class="timescale-divider"></span>
         <ng-select
           [items]="zoomOptions"
           bindValue="value"
@@ -84,7 +85,7 @@
             [style.width.px]="COLUMN_WIDTH"
           ></div>
 
-          <!-- Hover hint -->
+          <!-- Hover hint (only when row is empty) -->
           <div class="add-hint" *ngIf="hoveredWorkCenterId === wc.docId && getBarsForCenter(wc.docId).length === 0">
             <span>Click to add dates</span>
           </div>
@@ -93,6 +94,7 @@
           <div
             *ngFor="let bar of getBarsForCenter(wc.docId); trackBy: trackByBar"
             class="work-order-bar status-{{ bar.workOrder.data.status }}"
+            [class.narrow]="bar.width < 140"
             [style.left.px]="bar.left"
             [style.width.px]="bar.width"
             (mouseenter)="showTooltip($event, bar.workOrder)"
