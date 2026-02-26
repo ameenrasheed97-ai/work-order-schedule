@@ -1,5 +1,5 @@
 export type WorkOrderStatus = 'open' | 'in-progress' | 'complete' | 'blocked';
-export type ZoomLevel = 'day' | 'week' | 'month';
+export type ZoomLevel = 'hour' | 'day' | 'week' | 'month';
 export type PanelMode = 'create' | 'edit';
 
 export interface WorkCenterDocument {

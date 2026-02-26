@@ -6,7 +6,10 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { TimelineService } from '../../services/timeline.service';
-import { WorkOrderDocument, WorkCenterDocument, ZoomLevel, PanelMode, WorkOrderStatus } from '../../models';
+import {
+  WorkOrderDocument, WorkCenterDocument,
+  ZoomLevel, PanelMode, WorkOrderStatus
+} from '../../models';
 import { WorkOrderPanelComponent } from '../work-order-panel/work-order-panel.component';
 
 interface BarPosition {
@@ -30,38 +33,44 @@ export class TimelineComponent implements OnInit, OnDestroy {
   private cdr = inject(ChangeDetectorRef);
 
   readonly workCenters = this.svc.workCenters;
-  readonly workOrders = this.svc.workOrders;
-  readonly zoomLevel = this.svc.zoomLevel;
+  readonly workOrders  = this.svc.workOrders;
+  readonly zoomLevel   = this.svc.zoomLevel;
 
-  readonly COLUMN_WIDTH = 120;
-  readonly TOTAL_COLUMNS = 60;
-  readonly ROW_HEIGHT = 52;
+  readonly COLUMN_WIDTH   = 120;
+  readonly TOTAL_COLUMNS  = 60;
+  readonly ROW_HEIGHT     = 52;
 
   timelineStart!: Date;
   columns: Date[] = [];
 
-  isPanelOpen = false;
+  isPanelOpen        = false;
   panelMode: PanelMode = 'create';
   editingWorkOrder: WorkOrderDocument | null = null;
   panelPrefilledDate: string | null = null;
-  panelWorkCenterId: string | null = null;
+  panelWorkCenterId:  string | null = null;
 
   openDropdownId: string | null = null;
 
-  tooltip: { visible: boolean; workOrder: WorkOrderDocument | null; x: number; y: number } = {
-    visible: false, workOrder: null, x: 0, y: 0
-  };
+  tooltip: {
+    visible: boolean;
+    workOrder: WorkOrderDocument | null;
+    x: number;
+    y: number;
+  } = { visible: false, workOrder: null, x: 0, y: 0 };
 
   hoveredWorkCenterId: string | null = null;
 
+  // ── Mock now has Hour, Day, Week, Month ──────────────────────
   zoomOptions = [
-    { value: 'day', label: 'Day' },
-    { value: 'week', label: 'Week' },
+    { value: 'hour',  label: 'Hour'  },
+    { value: 'day',   label: 'Day'   },
+    { value: 'week',  label: 'Week'  },
     { value: 'month', label: 'Month' },
   ];
 
   today = new Date();
 
+  // ── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
     this.rebuildTimeline();
     if (typeof document !== 'undefined') {
@@ -84,18 +93,35 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   };
 
+  // ── Timeline rebuild ─────────────────────────────────────────
   rebuildTimeline(): void {
     const zoom = this.zoomLevel();
-    const buffer = zoom === 'day' ? 20 : zoom === 'week' ? 8 : 4;
+
+    // How many units to show BEFORE today
+    const buffer = zoom === 'hour' ? 24
+                 : zoom === 'day'  ? 20
+                 : zoom === 'week' ? 8
+                 : 4; // month
+
     this.timelineStart = new Date();
-    if (zoom === 'day') this.timelineStart.setDate(this.timelineStart.getDate() - buffer);
+
+    if      (zoom === 'hour') this.timelineStart.setHours(this.timelineStart.getHours() - buffer);
+    else if (zoom === 'day')  this.timelineStart.setDate(this.timelineStart.getDate() - buffer);
     else if (zoom === 'week') this.timelineStart.setDate(this.timelineStart.getDate() - buffer * 7);
-    else this.timelineStart.setMonth(this.timelineStart.getMonth() - buffer);
-    this.timelineStart.setHours(0, 0, 0, 0);
+    else                      this.timelineStart.setMonth(this.timelineStart.getMonth() - buffer);
+
+    // For hour view keep minutes/seconds; for others snap to midnight
+    if (zoom !== 'hour') {
+      this.timelineStart.setHours(0, 0, 0, 0);
+    } else {
+      this.timelineStart.setMinutes(0, 0, 0);
+    }
+
     this.columns = this.svc.generateColumns(this.timelineStart, this.TOTAL_COLUMNS, zoom);
     this.cdr.markForCheck();
   }
 
+  // ── Computed helpers ─────────────────────────────────────────
   get totalTimelineWidth(): number {
     return this.TOTAL_COLUMNS * this.COLUMN_WIDTH;
   }
@@ -105,37 +131,53 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   isCurrentPeriod(date: Date): boolean {
-    const t = this.today;
+    const t    = this.today;
     const zoom = this.zoomLevel();
+
+    if (zoom === 'hour') {
+      return (
+        date.toDateString() === t.toDateString() &&
+        date.getHours()     === t.getHours()
+      );
+    }
     if (zoom === 'day') return date.toDateString() === t.toDateString();
     if (zoom === 'week') {
-      const end = new Date(date); end.setDate(date.getDate() + 6);
+      const end = new Date(date);
+      end.setDate(date.getDate() + 6);
       return t >= date && t <= end;
     }
-    return date.getMonth() === t.getMonth() && date.getFullYear() === t.getFullYear();
+    // month
+    return (
+      date.getMonth()     === t.getMonth() &&
+      date.getFullYear()  === t.getFullYear()
+    );
   }
 
   get todayLineLeft(): number {
-    return this.svc.dateToPixel(this.today, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
+    return this.svc.dateToPixel(
+      this.today, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel()
+    );
   }
 
   getBarsForCenter(workCenterId: string): BarPosition[] {
     return this.svc.getWorkOrdersForCenter(workCenterId).map(wo => {
-      const left = this.svc.dateToPixel(wo.data.startDate, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
-      const right = this.svc.dateToPixel(wo.data.endDate, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
+      const left  = this.svc.dateToPixel(wo.data.startDate, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
+      const right = this.svc.dateToPixel(wo.data.endDate,   this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
       return { workOrder: wo, left, width: Math.max(right - left, 60) };
     });
   }
 
+  // ── Zoom change ──────────────────────────────────────────────
   onZoomChange(zoom: string): void {
     this.svc.setZoomLevel(zoom as ZoomLevel);
     this.rebuildTimeline();
     setTimeout(() => this.scrollToToday(), 50);
   }
 
+  // ── Scroll to today ──────────────────────────────────────────
   scrollToToday(): void {
     if (!this.scrollContainer) return;
-    const el = this.scrollContainer.nativeElement as HTMLElement;
+    const el     = this.scrollContainer.nativeElement as HTMLElement;
     const center = this.todayLineLeft - el.clientWidth / 2;
     if (el.scrollTo) {
       el.scrollTo({ left: Math.max(0, center), behavior: 'smooth' });
@@ -144,75 +186,87 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ── Timeline click → open create panel ──────────────────────
   onTimelineClick(event: MouseEvent, workCenter: WorkCenterDocument): void {
     if ((event.target as HTMLElement).closest('.work-order-bar')) return;
-    const el = this.scrollContainer.nativeElement;
+    const el   = this.scrollContainer.nativeElement as HTMLElement;
     const rect = el.getBoundingClientRect();
-    const clickX = event.clientX - rect.left + el.scrollLeft;
-    const date = this.svc.pixelToDate(clickX, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
-    const iso = date.toISOString().split('T')[0];
-
-    this.panelMode = 'create';
-    this.editingWorkOrder = null;
-    this.panelPrefilledDate = iso;
-    this.panelWorkCenterId = workCenter.docId;
-    this.isPanelOpen = true;
+    const px   = event.clientX - rect.left + el.scrollLeft;
+    const date = this.svc.pixelToDate(px, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
+    this.panelPrefilledDate = date.toISOString().split('T')[0];
+    this.panelWorkCenterId  = workCenter.docId;
+    this.panelMode          = 'create';
+    this.editingWorkOrder   = null;
+    this.isPanelOpen        = true;
     this.cdr.markForCheck();
   }
 
+  // ── Edit / Delete ────────────────────────────────────────────
   openEdit(wo: WorkOrderDocument): void {
-    this.openDropdownId = null;
-    this.panelMode = 'edit';
-    this.editingWorkOrder = wo;
-    this.panelPrefilledDate = null;
-    this.panelWorkCenterId = null;
-    this.isPanelOpen = true;
+    this.editingWorkOrder  = wo;
+    this.panelMode         = 'edit';
+    this.isPanelOpen       = true;
+    this.openDropdownId    = null;
     this.cdr.markForCheck();
   }
 
   deleteWorkOrder(docId: string): void {
-    this.openDropdownId = null;
     this.svc.deleteWorkOrder(docId);
+    this.openDropdownId = null;
     this.cdr.markForCheck();
   }
 
-  closePanel(): void { this.isPanelOpen = false; this.cdr.markForCheck(); }
-  onSaved(): void { this.isPanelOpen = false; this.cdr.markForCheck(); }
+  closePanel(): void {
+    this.isPanelOpen = false;
+    this.cdr.markForCheck();
+  }
 
+  onSaved(): void {
+    this.isPanelOpen = false;
+    this.cdr.markForCheck();
+  }
+
+  // ── Dropdown toggle ──────────────────────────────────────────
   toggleDropdown(event: MouseEvent, docId: string): void {
     event.stopPropagation();
     this.openDropdownId = this.openDropdownId === docId ? null : docId;
     this.cdr.markForCheck();
   }
 
+  // ── Tooltip ──────────────────────────────────────────────────
   showTooltip(event: MouseEvent, wo: WorkOrderDocument): void {
-    this.tooltip = { visible: true, workOrder: wo, x: event.clientX + 12, y: event.clientY - 8 };
+    this.tooltip = { visible: true, workOrder: wo, x: event.clientX + 12, y: event.clientY + 12 };
     this.cdr.markForCheck();
   }
 
   moveTooltip(event: MouseEvent): void {
     this.tooltip.x = event.clientX + 12;
-    this.tooltip.y = event.clientY - 8;
+    this.tooltip.y = event.clientY + 12;
     this.cdr.markForCheck();
   }
 
-  hideTooltip(): void { this.tooltip.visible = false; this.cdr.markForCheck(); }
+  hideTooltip(): void {
+    this.tooltip.visible = false;
+    this.cdr.markForCheck();
+  }
 
+  // ── Status label ─────────────────────────────────────────────
   getStatusLabel(status: WorkOrderStatus): string {
     const map: Record<WorkOrderStatus, string> = {
-      'open': 'Open',
+      'open':        'Open',
       'in-progress': 'In progress',
-      'complete': 'Complete',
-      'blocked': 'Blocked',
+      'complete':    'Complete',
+      'blocked':     'Blocked',
     };
-    return map[status];
+    return map[status] ?? status;
   }
 
   formatDate(iso: string): string {
     return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
   }
 
+  // ── TrackBy fns ──────────────────────────────────────────────
   trackByDocId(_: number, item: { docId: string }): string { return item.docId; }
+  trackByDate(_: number, date: Date): number { return date.getTime(); }
   trackByBar(_: number, bar: BarPosition): string { return bar.workOrder.docId; }
-  trackByDate(_: number, d: Date): number { return d.getTime(); }
 }
