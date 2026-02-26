@@ -36,14 +36,23 @@ export class TimelineComponent implements OnInit, OnDestroy {
   readonly workOrders  = this.svc.workOrders;
   readonly zoomLevel   = this.svc.zoomLevel;
 
-  readonly COLUMN_WIDTH   = 120;
-  readonly TOTAL_COLUMNS  = 60;
-  readonly ROW_HEIGHT     = 52;
+  readonly ROW_HEIGHT    = 52;
+  readonly TOTAL_COLUMNS = 120;
+
+  // ── Dynamic column width based on zoom ──────────────────────
+  get COLUMN_WIDTH(): number {
+    const zoom = this.zoomLevel();
+    if (zoom === 'hour')  return 80;
+    if (zoom === 'day')   return 120;
+    if (zoom === 'week')  return 160;
+    if (zoom === 'month') return 150;
+    return 120;
+  }
 
   timelineStart!: Date;
   columns: Date[] = [];
 
-  isPanelOpen        = false;
+  isPanelOpen          = false;
   panelMode: PanelMode = 'create';
   editingWorkOrder: WorkOrderDocument | null = null;
   panelPrefilledDate: string | null = null;
@@ -60,7 +69,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   hoveredWorkCenterId: string | null = null;
 
-  // ── Mock now has Hour, Day, Week, Month ──────────────────────
   zoomOptions = [
     { value: 'hour',  label: 'Hour'  },
     { value: 'day',   label: 'Day'   },
@@ -70,7 +78,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   today = new Date();
 
-  // ── Lifecycle ────────────────────────────────────────────────
   ngOnInit(): void {
     this.rebuildTimeline();
     if (typeof document !== 'undefined') {
@@ -93,15 +100,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   };
 
-  // ── Timeline rebuild ─────────────────────────────────────────
   rebuildTimeline(): void {
     const zoom = this.zoomLevel();
 
-    // How many units to show BEFORE today
     const buffer = zoom === 'hour' ? 24
                  : zoom === 'day'  ? 20
                  : zoom === 'week' ? 8
-                 : 4; // month
+                 : 4;
 
     this.timelineStart = new Date();
 
@@ -110,7 +115,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     else if (zoom === 'week') this.timelineStart.setDate(this.timelineStart.getDate() - buffer * 7);
     else                      this.timelineStart.setMonth(this.timelineStart.getMonth() - buffer);
 
-    // For hour view keep minutes/seconds; for others snap to midnight
     if (zoom !== 'hour') {
       this.timelineStart.setHours(0, 0, 0, 0);
     } else {
@@ -121,7 +125,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // ── Computed helpers ─────────────────────────────────────────
   get totalTimelineWidth(): number {
     return this.TOTAL_COLUMNS * this.COLUMN_WIDTH;
   }
@@ -135,46 +138,35 @@ export class TimelineComponent implements OnInit, OnDestroy {
     const zoom = this.zoomLevel();
 
     if (zoom === 'hour') {
-      return (
-        date.toDateString() === t.toDateString() &&
-        date.getHours()     === t.getHours()
-      );
+      return date.toDateString() === t.toDateString() && date.getHours() === t.getHours();
     }
-    if (zoom === 'day') return date.toDateString() === t.toDateString();
+    if (zoom === 'day')  return date.toDateString() === t.toDateString();
     if (zoom === 'week') {
       const end = new Date(date);
       end.setDate(date.getDate() + 6);
       return t >= date && t <= end;
     }
-    // month
-    return (
-      date.getMonth()     === t.getMonth() &&
-      date.getFullYear()  === t.getFullYear()
-    );
+    return date.getMonth() === t.getMonth() && date.getFullYear() === t.getFullYear();
   }
 
   get todayLineLeft(): number {
-    return this.svc.dateToPixel(
-      this.today, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel()
-    );
+    return this.svc.dateToPixel(this.today, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
   }
 
   getBarsForCenter(workCenterId: string): BarPosition[] {
     return this.svc.getWorkOrdersForCenter(workCenterId).map(wo => {
       const left  = this.svc.dateToPixel(wo.data.startDate, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
       const right = this.svc.dateToPixel(wo.data.endDate,   this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
-      return { workOrder: wo, left, width: Math.max(right - left, 60) };
+      return { workOrder: wo, left, width: Math.max(right - left, 180) };
     });
   }
 
-  // ── Zoom change ──────────────────────────────────────────────
   onZoomChange(zoom: string): void {
     this.svc.setZoomLevel(zoom as ZoomLevel);
     this.rebuildTimeline();
     setTimeout(() => this.scrollToToday(), 50);
   }
 
-  // ── Scroll to today ──────────────────────────────────────────
   scrollToToday(): void {
     if (!this.scrollContainer) return;
     const el     = this.scrollContainer.nativeElement as HTMLElement;
@@ -186,7 +178,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
-  // ── Timeline click → open create panel ──────────────────────
   onTimelineClick(event: MouseEvent, workCenter: WorkCenterDocument): void {
     if ((event.target as HTMLElement).closest('.work-order-bar')) return;
     const el   = this.scrollContainer.nativeElement as HTMLElement;
@@ -201,12 +192,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // ── Edit / Delete ────────────────────────────────────────────
   openEdit(wo: WorkOrderDocument): void {
-    this.editingWorkOrder  = wo;
-    this.panelMode         = 'edit';
-    this.isPanelOpen       = true;
-    this.openDropdownId    = null;
+    this.editingWorkOrder = wo;
+    this.panelMode        = 'edit';
+    this.isPanelOpen      = true;
+    this.openDropdownId   = null;
     this.cdr.markForCheck();
   }
 
@@ -226,14 +216,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // ── Dropdown toggle ──────────────────────────────────────────
   toggleDropdown(event: MouseEvent, docId: string): void {
     event.stopPropagation();
     this.openDropdownId = this.openDropdownId === docId ? null : docId;
     this.cdr.markForCheck();
   }
 
-  // ── Tooltip ──────────────────────────────────────────────────
   showTooltip(event: MouseEvent, wo: WorkOrderDocument): void {
     this.tooltip = { visible: true, workOrder: wo, x: event.clientX + 12, y: event.clientY + 12 };
     this.cdr.markForCheck();
@@ -250,7 +238,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  // ── Status label ─────────────────────────────────────────────
   getStatusLabel(status: WorkOrderStatus): string {
     const map: Record<WorkOrderStatus, string> = {
       'open':        'Open',
@@ -262,10 +249,11 @@ export class TimelineComponent implements OnInit, OnDestroy {
   }
 
   formatDate(iso: string): string {
-    return new Date(iso).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+    if (!iso) return '';
+    const [y, m, d] = iso.split('-');
+    return `${m}.${d}.${y}`;
   }
 
-  // ── TrackBy fns ──────────────────────────────────────────────
   trackByDocId(_: number, item: { docId: string }): string { return item.docId; }
   trackByDate(_: number, date: Date): number { return date.getTime(); }
   trackByBar(_: number, bar: BarPosition): string { return bar.workOrder.docId; }

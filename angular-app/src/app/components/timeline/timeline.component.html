@@ -98,7 +98,7 @@
           <div
             *ngFor="let bar of getBarsForCenter(wc.docId); trackBy: trackByBar"
             class="work-order-bar status-{{ bar.workOrder.data.status }}"
-            [class.narrow]="bar.width < 140"
+            [class.narrow]="bar.width < 180"
             [style.left.px]="bar.left"
             [style.width.px]="bar.width"
             (mouseenter)="showTooltip($event, bar.workOrder)"
