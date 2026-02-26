@@ -112,6 +112,20 @@ An Angular-based work order scheduling application with a visual timeline interf
    - Improved `rebuildTimeline()` with intelligent buffer calculation for hour zoom
    - Better type safety with `as HTMLElement` casts
 
+5. **Dynamic Column Width & Bar Visibility Enhancement** (Latest Commit)
+   - Implemented dynamic `COLUMN_WIDTH` getter based on zoom level:
+     - Hour zoom: 80px per column
+     - Day zoom: 120px per column
+     - Week zoom: 160px per column
+     - Month zoom: 150px per column
+   - Increased `TOTAL_COLUMNS` from 60 to 120 for broader timeline view
+   - Improved bar width threshold for "narrow" class from 140px to 180px
+   - Enhanced SCSS styling for narrow bars:
+     - Work order names now visible at smaller font-size (11px) on narrow bars
+     - Status badges hidden only on very narrow bars to preserve text display
+     - Optimized padding (6px/8px) for better text fit in bars
+   - Code cleanup: Removed redundant comments and improved code readability
+
 ---
 
 ## 📦 Dependencies
@@ -134,7 +148,7 @@ Runs on `http://localhost:4200`
 ---
 
 ## 📋 Current Status
-✅ **Functional and Running** - App successfully compiles and renders timeline interface with full CRUD operations for work orders.
+✅ **Fully Functional & Optimized** - App successfully compiles and renders timeline interface with dynamic column widths based on zoom level. Work order text now visible even on narrower bars in Month view.
 
 ---
 
