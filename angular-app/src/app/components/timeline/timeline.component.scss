@@ -27,10 +27,14 @@
 }
 
 .page-title {
-  font-size: 20px;
-  font-weight: 700;
-  color: #111827;
-  margin: 0;
+  width: 142px;
+  height: 34px;
+  color: rgba(3, 9, 41, 1);
+  font-family: CircularStd-Medium;
+  font-size: 24px;
+  font-weight: 500;
+  font-style: medium;
+
 }
 
 // "Today" button
@@ -68,20 +72,15 @@
 }
 
 .timescale-label {
-  padding: 0 12px;
-  font-size: 13px;
-  font-weight: 400;
-  color: #6b7280;
-  white-space: nowrap;
-  border-right: 1px solid #e5e7eb;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  flex-shrink: 0;
-}
+  width: 75px;
+height: 25px;
+border-radius: 5px 0px 0px 5px;
+background-color: rgba(241, 243, 248, 0.75);
 
+}
 .timescale-select {
-  min-width: 80px;
+  min-width: 90px;
+  position: relative;
 
   .ng-select-container {
     height: 30px !important;
@@ -89,21 +88,77 @@
     border: none !important;
     border-radius: 0 5px 5px 0 !important;
     background: transparent !important;
-    font-family: "Circular-Std", sans-serif !important;
+    font-family: "CircularStd-Medium", sans-serif !important;
     font-size: 13px !important;
-    font-weight: 600 !important;
-    color: #111827 !important;
+    font-weight: 500 !important;
+    color: #3e40db !important;
     box-shadow: none !important;
-    cursor: pointer;
+    cursor: pointer !important;
   }
 
-  .ng-value-container { padding-left: 10px !important; }
-  .ng-value-label { color: #111827 !important; font-weight: 600 !important; font-size: 13px !important; }
-  .ng-arrow-wrapper { padding-right: 8px !important; }
-  .ng-arrow { border-color: #6b7280 transparent transparent !important; border-width: 4px 3px 0 !important; }
+  .ng-value-container {
+    padding: 0 8px !important;
+  }
+
+  .ng-value-label {
+    color: #3e40db !important;
+    font-weight: 500 !important;
+    font-size: 13px !important;
+    font-family: "CircularStd-Medium", sans-serif !important;
+  }
+
+  // Dropdown arrow styling - match design
+  .ng-arrow-wrapper {
+    width: 24px !important;
+    padding: 0 6px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+  }
+
+  .ng-arrow {
+    border-color: #3e40db transparent transparent !important;
+    border-width: 6px 6px 0 !important;
+    border-style: solid !important;
+    width: 0 !important;
+    height: 0 !important;
+  }
 
   &.ng-select-opened .ng-arrow {
-    border-color: transparent transparent #6b7280 !important;
+    border-color: transparent transparent #3e40db !important;
+    border-width: 0 6px 6px !important;
+  }
+}
+
+// Dropdown panel styling - pierce ng-select's popup
+::ng-deep .ng-dropdown-panel {
+  position: absolute !important;
+  left: -76px !important;
+  width: 200px !important;
+  margin-top: 8px !important;
+  min-height: 136px;
+  border-radius: 5px;
+  background-color: rgba(255, 255, 255, 1);
+  box-shadow: 
+    0 0 0 1px rgba(104, 113, 150, 0.1),
+    0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
+    0 4.5px 5px -1px rgba(216, 220, 235, 1);
+
+  .ng-dropdown-panel-items {
+    padding: 12px 0;
+  }
+
+  .ng-option {
+    padding: 8px 12px;
+    font-size: 13px;
+    font-family: "CircularStd-Medium", sans-serif;
+    color: #111827;
+
+    &.ng-option-selected,
+    &:hover:not(.ng-option-disabled) {
+      background-color: rgba(62, 64, 219, 0.08);
+      color: #3e40db;
+    }
   }
 }
 

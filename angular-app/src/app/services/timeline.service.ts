@@ -6,7 +6,7 @@ import { WORK_CENTERS, WORK_ORDERS } from '../data/sample-data';
 export class TimelineService {
   private _workCenters = signal<WorkCenterDocument[]>(this.loadWorkCenters());
   private _workOrders  = signal<WorkOrderDocument[]>(this.loadWorkOrders());
-  private _zoomLevel   = signal<ZoomLevel>('day');
+  private _zoomLevel   = signal<ZoomLevel>('month');
 
   readonly workCenters = this._workCenters.asReadonly();
   readonly workOrders  = this._workOrders.asReadonly();

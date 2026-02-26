@@ -126,6 +126,32 @@ An Angular-based work order scheduling application with a visual timeline interf
      - Optimized padding (6px/8px) for better text fit in bars
    - Code cleanup: Removed redundant comments and improved code readability
 
+6. **ng-Bootstrap Datepicker Integration** (New)
+   - Implemented `ngb-datepicker` for Start Date and End Date fields per assignment specifications
+   - Replaced text input fields with native date picker components
+   - Updated form data handling to use date objects `{ year, month, day }` format
+   - Features:
+     - Click on date input to open calendar picker
+     - Pre-fills Start Date from timeline click position
+     - Pre-fills End Date automatically: Start Date + 7 days
+     - Default status set to "Open"
+     - Proper date validation and range checking
+   - Conversion utilities:
+     - `isoToDateObj()`: Convert ISO string dates to datepicker format
+     - `dateObjToIso()`: Convert datepicker dates to ISO string format
+   - Updated date range validator to work with date objects
+   - Improved form validation: `dateRange` error if End Date <= Start Date
+
+7. **Timescale Dropdown Panel Positioning & Styling** (Latest)
+   - Fixed dropdown panel positioning to align directly below timescale selector
+   - Implemented `position: relative` on `.timescale-select` container as positioning context
+   - Applied `position: absolute` with left offset to ng-select dropdown panel
+   - Styled dropdown with 200px width, 136px min-height, 5px border-radius
+   - Applied 3-layer box-shadow for depth matching design specs (colors: #686772, #c8cfe9, #d8dceb)
+   - Selected dropdown option highlighting with blue background (rgba(62, 64, 219, 0.08))
+   - Optimized CSS specificity: Removed unnecessary `!important` declarations, kept only on critical positioning properties (`position`, `left`, `width`, `margin-top`)
+   - Updated Angular Budgets in `angular.json`: Increased component style limit from 8kB to 12kB to accommodate timeline styling
+
 ---
 
 ## 📦 Dependencies
@@ -148,7 +174,7 @@ Runs on `http://localhost:4200`
 ---
 
 ## 📋 Current Status
-✅ **Fully Functional & Optimized** - App successfully compiles and renders timeline interface with dynamic column widths based on zoom level. Work order text now visible even on narrower bars in Month view.
+✅ **UI Styling Complete** - All core features implemented with design-matched styling. Timeline with zoom controls fully functional. Dropdown panel positioned correctly with optimized CSS. Date pickers and status dropdowns integrated. Ready for feature expansion or backend integration.
 
 ---
 
