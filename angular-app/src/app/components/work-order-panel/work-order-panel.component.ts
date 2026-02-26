@@ -3,7 +3,7 @@ import {
   SimpleChanges, ChangeDetectionStrategy, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WorkOrderDocument, WorkOrderStatus, PanelMode } from '../../models';
@@ -33,7 +33,7 @@ export class WorkOrderPanelComponent implements OnChanges {
   overlapError = false;
 
   statusOptions: { value: WorkOrderStatus; label: string; color: string }[] = [
-    { value: 'open',        label: 'Open',        color: '#4338ca' },
+    { value: 'open',        label: 'Open',        color: 'rgba(0, 176, 191, 1)' },
     { value: 'in-progress', label: 'In progress',  color: '#4338ca' },
     { value: 'complete',    label: 'Complete',     color: '#15803d' },
     { value: 'blocked',     label: 'Blocked',      color: '#d97706' },
@@ -43,9 +43,9 @@ export class WorkOrderPanelComponent implements OnChanges {
     this.form = this.fb.group({
       name:      ['', Validators.required],
       status:    ['open', Validators.required],
-      startDate: [null, Validators.required],
-      endDate:   [null, Validators.required],
-    }, { validators: this.dateRangeValidator });
+      startDate: [null],
+      endDate:   [null],
+    });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -84,16 +84,6 @@ export class WorkOrderPanelComponent implements OnChanges {
     if (!dateObj) return '';
     const { year, month, day } = dateObj;
     return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
-  }
-
-  private dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const start = group.get('startDate')?.value as { year: number; month: number; day: number } | null;
-    const end   = group.get('endDate')?.value as { year: number; month: number; day: number } | null;
-    if (!start || !end) return null;
-    const s = new Date(start.year, start.month - 1, start.day);
-    const e = new Date(end.year, end.month - 1, end.day);
-    if (e <= s) return { dateRange: true };
-    return null;
   }
 
   isInvalid(fieldName: string): boolean {

@@ -133,7 +133,7 @@ background-color: rgba(241, 243, 248, 0.75);
 // Dropdown panel styling - pierce ng-select's popup
 ::ng-deep .ng-dropdown-panel {
   position: absolute !important;
-  left: -76px !important;
+ // left: -76px !important;
   width: 200px !important;
   margin-top: 8px !important;
   min-height: 136px;

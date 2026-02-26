@@ -41,14 +41,9 @@
           [clearable]="false"
           [searchable]="false"
           class="status-select"
-          placeholder="Select status"
         >
           <ng-template ng-option-tmp let-item="item">
-            <span class="status-pill"
-              [style.color]="item.color"
-              [style.background]="item.color + '20'">
-              {{ item.label }}
-            </span>
+            <span>{{ item.label }}</span>
           </ng-template>
           <ng-template ng-label-tmp let-item="item">
             <span class="status-pill"
@@ -69,16 +64,11 @@
           #startPicker="ngbDatepicker"
           type="text"
           class="form-input"
-          [class.error]="isInvalid('startDate')"
           formControlName="startDate"
           placeholder="MM/DD/YYYY"
           autocomplete="off"
           (click)="startPicker.toggle()"
         />
-        <span class="form-error"
-          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['required']">
-          Start date is required
-        </span>
       </div>
 
       <!-- End Date -->
@@ -89,20 +79,11 @@
           #endPicker="ngbDatepicker"
           type="text"
           class="form-input"
-          [class.error]="isInvalid('endDate')"
           formControlName="endDate"
           placeholder="MM/DD/YYYY"
           autocomplete="off"
           (click)="endPicker.toggle()"
         />
-        <span class="form-error"
-          *ngIf="isInvalid('endDate') && form.get('endDate')?.errors?.['required']">
-          End date is required
-        </span>
-        <span class="form-error"
-          *ngIf="form.errors?.['dateRange'] && form.get('endDate')?.touched">
-          End date must be after start date
-        </span>
       </div>
 
       <!-- Overlap error -->
