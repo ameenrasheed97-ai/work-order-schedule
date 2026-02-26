@@ -5,13 +5,14 @@ import {
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, AbstractControl, ValidationErrors } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WorkOrderDocument, WorkOrderStatus, PanelMode } from '../../models';
 import { TimelineService } from '../../services/timeline.service';
 
 @Component({
   selector: 'app-work-order-panel',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, NgSelectModule],
+  imports: [CommonModule, ReactiveFormsModule, NgSelectModule, NgbModule],
   templateUrl: './work-order-panel.component.html',
   styleUrls: ['./work-order-panel.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,8 +43,8 @@ export class WorkOrderPanelComponent implements OnChanges {
     this.form = this.fb.group({
       name:      ['', Validators.required],
       status:    ['open', Validators.required],
-      startDate: ['', [Validators.required, this.dateFormatValidator]],
-      endDate:   ['', [Validators.required, this.dateFormatValidator]],
+      startDate: [null, Validators.required],
+      endDate:   [null, Validators.required],
     }, { validators: this.dateRangeValidator });
   }
 
@@ -55,60 +56,49 @@ export class WorkOrderPanelComponent implements OnChanges {
         this.form.setValue({
           name:      this.workOrder.data.name,
           status:    this.workOrder.data.status,
-          startDate: this.isoToDisplay(this.workOrder.data.startDate),
-          endDate:   this.isoToDisplay(this.workOrder.data.endDate),
+          startDate: this.isoToDateObj(this.workOrder.data.startDate),
+          endDate:   this.isoToDateObj(this.workOrder.data.endDate),
         });
       } else {
         const start = this.prefilledDate ?? new Date().toISOString().split('T')[0];
+        const startObj = this.isoToDateObj(start);
         const endDate = new Date(start);
         endDate.setDate(endDate.getDate() + 7);
+        const endObj = this.isoToDateObj(endDate.toISOString().split('T')[0]);
         this.form.setValue({
           name:      '',
           status:    'open',
-          startDate: this.isoToDisplay(start),
-          endDate:   this.isoToDisplay(endDate.toISOString().split('T')[0]),
+          startDate: startObj,
+          endDate:   endObj,
         });
       }
     }
   }
 
-  private isoToDisplay(iso: string): string {
-    const [y, m, d] = iso.split('-');
-    return `${m}.${d}.${y}`;
+  private isoToDateObj(iso: string): { year: number; month: number; day: number } | null {
+    const [y, m, d] = iso.split('-').map(Number);
+    return { year: y, month: m, day: d };
   }
 
-  private displayToIso(display: string): string {
-    const parts = display.split('.');
-    if (parts.length !== 3) return '';
-    const [m, d, y] = parts;
-    return `${y}-${m.padStart(2,'0')}-${d.padStart(2,'0')}`;
-  }
-
-  private dateFormatValidator(ctrl: AbstractControl): ValidationErrors | null {
-    const val = ctrl.value as string;
-    if (!val) return null;
-    const parts = val.split('.');
-    if (parts.length !== 3) return { dateFormat: true };
-    const [m, d, y] = parts.map(Number);
-    if (isNaN(m) || isNaN(d) || isNaN(y)) return { dateFormat: true };
-    if (m < 1 || m > 12 || d < 1 || d > 31 || y < 2000) return { dateFormat: true };
-    return null;
+  private dateObjToIso(dateObj: { year: number; month: number; day: number } | null): string {
+    if (!dateObj) return '';
+    const { year, month, day } = dateObj;
+    return `${year}-${String(month).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
   }
 
   private dateRangeValidator(group: AbstractControl): ValidationErrors | null {
-    const start = group.get('startDate')?.value as string;
-    const end   = group.get('endDate')?.value as string;
+    const start = group.get('startDate')?.value as { year: number; month: number; day: number } | null;
+    const end   = group.get('endDate')?.value as { year: number; month: number; day: number } | null;
     if (!start || !end) return null;
-    const toDate = (v: string) => {
-      const parts = v.split('.');
-      if (parts.length !== 3) return null;
-      const [m, d, y] = parts.map(Number);
-      return new Date(y, m - 1, d);
-    };
-    const s = toDate(start);
-    const e = toDate(end);
-    if (s && e && e <= s) return { dateRange: true };
+    const s = new Date(start.year, start.month - 1, start.day);
+    const e = new Date(end.year, end.month - 1, end.day);
+    if (e <= s) return { dateRange: true };
     return null;
+  }
+
+  isInvalid(fieldName: string): boolean {
+    const control = this.form.get(fieldName);
+    return !!(control && control.invalid && control.touched);
   }
 
   get title(): string { return 'Work Order Details'; }
@@ -119,8 +109,8 @@ export class WorkOrderPanelComponent implements OnChanges {
     if (this.form.invalid) { this.form.markAllAsTouched(); return; }
 
     const { name, status, startDate, endDate } = this.form.value;
-    const startIso = this.displayToIso(startDate);
-    const endIso   = this.displayToIso(endDate);
+    const startIso = this.dateObjToIso(startDate);
+    const endIso   = this.dateObjToIso(endDate);
     const wcId     = this.mode === 'edit' ? this.workOrder!.data.workCenterId : this.workCenterId!;
     const excludeId = this.mode === 'edit' ? this.workOrder!.docId : undefined;
 
@@ -147,10 +137,5 @@ export class WorkOrderPanelComponent implements OnChanges {
     if ((event.target as HTMLElement).classList.contains('panel-overlay')) {
       this.closed.emit();
     }
-  }
-
-  isInvalid(field: string): boolean {
-    const ctrl = this.form.get(field);
-    return !!(ctrl?.invalid && ctrl?.touched);
   }
 }

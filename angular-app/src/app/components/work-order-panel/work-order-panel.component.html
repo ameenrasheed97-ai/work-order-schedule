@@ -61,49 +61,47 @@
         <span class="form-error" *ngIf="isInvalid('status')">Status is required</span>
       </div>
 
+      <!-- Start Date -->
+      <div class="form-field">
+        <label class="form-label">Start date</label>
+        <input
+          ngbDatepicker
+          #startPicker="ngbDatepicker"
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('startDate')"
+          formControlName="startDate"
+          placeholder="MM/DD/YYYY"
+          autocomplete="off"
+          (click)="startPicker.toggle()"
+        />
+        <span class="form-error"
+          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['required']">
+          Start date is required
+        </span>
+      </div>
+
       <!-- End Date -->
       <div class="form-field">
         <label class="form-label">End date</label>
         <input
+          ngbDatepicker
+          #endPicker="ngbDatepicker"
           type="text"
           class="form-input"
           [class.error]="isInvalid('endDate')"
           formControlName="endDate"
-          placeholder="MM.DD.YYYY"
+          placeholder="MM/DD/YYYY"
           autocomplete="off"
+          (click)="endPicker.toggle()"
         />
         <span class="form-error"
           *ngIf="isInvalid('endDate') && form.get('endDate')?.errors?.['required']">
           End date is required
         </span>
         <span class="form-error"
-          *ngIf="isInvalid('endDate') && form.get('endDate')?.errors?.['dateFormat']">
-          Format must be MM.DD.YYYY
-        </span>
-        <span class="form-error"
           *ngIf="form.errors?.['dateRange'] && form.get('endDate')?.touched">
           End date must be after start date
-        </span>
-      </div>
-
-      <!-- Start Date -->
-      <div class="form-field">
-        <label class="form-label">Start date</label>
-        <input
-          type="text"
-          class="form-input"
-          [class.error]="isInvalid('startDate')"
-          formControlName="startDate"
-          placeholder="MM.DD.YYYY"
-          autocomplete="off"
-        />
-        <span class="form-error"
-          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['required']">
-          Start date is required
-        </span>
-        <span class="form-error"
-          *ngIf="isInvalid('startDate') && form.get('startDate')?.errors?.['dateFormat']">
-          Format must be MM.DD.YYYY
         </span>
       </div>
 
