@@ -62,13 +62,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   openDropdownId: string | null = null;
 
-  tooltip: {
-    visible: boolean;
-    workOrder: WorkOrderDocument | null;
-    x: number;
-    y: number;
-  } = { visible: false, workOrder: null, x: 0, y: 0 };
-
   hoveredWorkCenterId: string | null = null;
 
   zoomOptions = [
@@ -224,21 +217,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.cdr.markForCheck();
   }
 
-  showTooltip(event: MouseEvent, wo: WorkOrderDocument): void {
-    this.tooltip = { visible: true, workOrder: wo, x: event.clientX + 12, y: event.clientY + 12 };
-    this.cdr.markForCheck();
-  }
-
-  moveTooltip(event: MouseEvent): void {
-    this.tooltip.x = event.clientX + 12;
-    this.tooltip.y = event.clientY + 12;
-    this.cdr.markForCheck();
-  }
-
-  hideTooltip(): void {
-    this.tooltip.visible = false;
-    this.cdr.markForCheck();
-  }
+  // Tooltip methods removed - feature disabled
 
   getStatusLabel(status: WorkOrderStatus): string {
     const map: Record<WorkOrderStatus, string> = {

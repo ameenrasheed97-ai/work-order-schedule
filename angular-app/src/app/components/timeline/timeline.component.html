@@ -102,9 +102,6 @@
             [style.left.px]="bar.left"
             [style.width.px]="bar.width"
             [style.zIndex]="openDropdownId === bar.workOrder.docId ? 100 : 2"
-            (mouseenter)="showTooltip($event, bar.workOrder)"
-            (mousemove)="moveTooltip($event)"
-            (mouseleave)="hideTooltip()"
             (click)="$event.stopPropagation()"
           >
             <span class="bar-name">{{ bar.workOrder.data.name }}</span>
@@ -130,27 +127,7 @@
   </div>
 
   <!-- Tooltip -->
-  <div
-    class="tooltip"
-    [class.visible]="tooltip.visible"
-    [style.left.px]="tooltip.x"
-    [style.top.px]="tooltip.y"
-    *ngIf="tooltip.workOrder"
-  >
-    <div class="tooltip-name">{{ tooltip.workOrder.data.name }}</div>
-    <div class="tooltip-row">
-      <span class="tooltip-label">Status</span>
-      <span class="tooltip-badge status-{{ tooltip.workOrder.data.status }}">{{ getStatusLabel(tooltip.workOrder.data.status) }}</span>
-    </div>
-    <div class="tooltip-row">
-      <span class="tooltip-label">Start</span>
-      <span>{{ formatDate(tooltip.workOrder.data.startDate) }}</span>
-    </div>
-    <div class="tooltip-row">
-      <span class="tooltip-label">End</span>
-      <span>{{ formatDate(tooltip.workOrder.data.endDate) }}</span>
-    </div>
-  </div>
+  <!-- Removed tooltip feature -->
 
 </div>
 
