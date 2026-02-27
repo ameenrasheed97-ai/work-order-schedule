@@ -35,6 +35,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
   readonly workCenters = this.svc.workCenters;
   readonly workOrders  = this.svc.workOrders;
   readonly zoomLevel   = this.svc.zoomLevel;
+  
+  window = window;
 
   readonly ROW_HEIGHT    = 52;
   readonly TOTAL_COLUMNS = 120;
@@ -66,6 +68,8 @@ export class TimelineComponent implements OnInit, OnDestroy {
     x: number;
     y: number;
   } = { visible: false, workOrder: null, x: 0, y: 0 };
+
+  dropdownPosition: { left: number; top: number } = { left: 0, top: 0 };
 
   hoveredWorkCenterId: string | null = null;
 
