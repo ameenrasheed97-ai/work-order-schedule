@@ -460,8 +460,10 @@ background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
   transition: background 0.1s;
 
-  &:hover { background: #f3f4f6; }
-  &.delete { color: #ef4444; &:hover { background: #fef2f2; } }
+ &:hover { background: white; }
+  &.delete { color: rgba(62, 64, 219, 1);
+    
+ &:hover { background: white; } }
 }
 
 // ─── Tooltip (Removed) ───────────────────────────────────────
