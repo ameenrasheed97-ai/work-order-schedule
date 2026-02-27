@@ -175,6 +175,10 @@
 
 // ─── Scroll area ─────────────────────────────────────────────
 .scroll-container {
+  width: 957px;
+height: 785px;
+background-color: rgba(247, 249, 252, 1);
+
   flex: 1;
   overflow-x: auto;
   overflow-y: auto;
