@@ -418,8 +418,7 @@ background-color: rgba(241, 243, 248, 0.75);
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 4px);
-  left: 50%;
-  transform: translateX(-50%) scale(0.95);
+  left: 0;  
   width: 110px;
   background: #fff;
   border: 1px solid #e5e7eb;
@@ -428,15 +427,22 @@ background-color: rgba(241, 243, 248, 0.75);
   z-index: 9999;
   padding: 3px;
   opacity: 0;
+  transform: scale(0.95);
   pointer-events: none;
   transition: opacity 0.15s, transform 0.15s;
   visibility: hidden;
 
   &.open {
     opacity: 1;
-    transform: translateX(-50%) scale(1);
+    transform: scale(1);
     pointer-events: all;
     visibility: visible;
+    width: 200px;
+height: 80px;
+box-shadow: 0 0 0 1px rgba(104, 113, 150, 0.1) , 0 2.5px 3px -1.5px rgba(200, 207, 233, 1) , 0 4.5px 5px -1px rgba(216, 220, 235, 1);
+border-radius: 5px;
+background-color: rgba(255, 255, 255, 1);
+
   }
 }
 
