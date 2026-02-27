@@ -261,7 +261,7 @@ background-color: rgba(247, 249, 252, 1);
   display: flex;
   position: relative;
   border-bottom: 1px solid #f3f4f6;
-  cursor: crosshair;
+  cursor: pointer;
   transition: background 0.1s;
   &.hovered { background: #f5f5ff; }
 }
