@@ -37,29 +37,6 @@
 
 }
 
-// "Today" button
-.btn-today {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  height: 32px;
-  padding: 0 14px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 6px;
-  font-family: "Circular-Std", sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: #374151;
-  cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
-
-  &:hover {
-    background: #f9fafb;
-    border-color: #d1d5db;
-  }
-}
-
 // "Timescale | Day ▼" combined pill
 .timescale-control {
   display: flex;
