@@ -37,27 +37,49 @@
 
 }
 
+.timescale-box{
+  width: 75px;
+height: 25px;
+border-radius: 5px 0 0 5px;
+background-color: rgba(241, 243, 248, 0.75);
+
+}
+
 // "Timescale | Day ▼" combined pill
 .timescale-control {
   display: flex;
   align-items: center;
   height: 32px;
-  border: 1px solid #e5e7eb;
   border-radius: 6px;
   overflow: visible;
   background: #fff;
 }
 
 .timescale-label {
-  width: 75px;
-height: 25px;
-border-radius: 5px 0px 0px 5px;
-background-color: rgba(241, 243, 248, 0.75);
+ width: 59px;
+height: 16px;
+color: rgba(104, 113, 150, 1);
+font-family: CircularStd-Book;
+font-size: 13px;
+font-weight: 400;
+font-style: book;
+padding-left: 11px;
+
 
 }
 .timescale-select {
   min-width: 90px;
   position: relative;
+  margin-left: 5px;
+  width: 40px;
+height: 16px;
+color: rgba(62, 64, 219, 1);
+font-family: CircularStd-Medium;
+font-size: 13px;
+font-weight: 500;
+font-style: medium;
+
+
 
   .ng-select-container {
     height: 30px !important;
