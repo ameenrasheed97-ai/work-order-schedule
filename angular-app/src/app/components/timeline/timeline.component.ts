@@ -69,8 +69,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     y: number;
   } = { visible: false, workOrder: null, x: 0, y: 0 };
 
-  dropdownPosition: { left: number; top: number } = { left: 0, top: 0 };
-
   hoveredWorkCenterId: string | null = null;
 
   zoomOptions = [

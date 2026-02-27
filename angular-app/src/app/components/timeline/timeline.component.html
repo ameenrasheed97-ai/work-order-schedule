@@ -101,6 +101,7 @@
             [class.narrow]="bar.width < 180"
             [style.left.px]="bar.left"
             [style.width.px]="bar.width"
+            [style.zIndex]="openDropdownId === bar.workOrder.docId ? 100 : 2"
             (mouseenter)="showTooltip($event, bar.workOrder)"
             (mousemove)="moveTooltip($event)"
             (mouseleave)="hideTooltip()"

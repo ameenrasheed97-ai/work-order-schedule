@@ -392,6 +392,7 @@ background-color: rgba(241, 243, 248, 0.75);
   flex-shrink: 0;
   margin-left: auto;
   overflow: visible;
+  z-index: 10;
 }
 
 .actions-btn {
@@ -416,24 +417,24 @@ background-color: rgba(241, 243, 248, 0.75);
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 2px);
-  right: 0;
+  top: calc(100% + 4px);
+  left: 50%;
+  transform: translateX(-50%) scale(0.95);
   width: 110px;
   background: #fff;
   border: 1px solid #e5e7eb;
   border-radius: 7px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
-  z-index: 1000;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  z-index: 9999;
   padding: 3px;
   opacity: 0;
-  transform: scale(0.97);
   pointer-events: none;
   transition: opacity 0.15s, transform 0.15s;
   visibility: hidden;
 
   &.open {
     opacity: 1;
-    transform: scale(1);
+    transform: translateX(-50%) scale(1);
     pointer-events: all;
     visibility: visible;
   }
