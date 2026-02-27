@@ -7,7 +7,9 @@
     </div>
     <div class="toolbar-bottom">
       <div class="timescale-control">
-        <div class="timescale-box"><span class="timescale-label">Timescale</span></div>
+        <div class="timescale-box">
+          <span class="timescale-label">Timescale</span>
+        </div>
         <ng-select
           [items]="zoomOptions"
           bindValue="value"
@@ -33,8 +35,6 @@
         *ngFor="let wc of workCenters(); trackBy: trackByDocId"
         class="left-row"
         [class.hovered]="hoveredWorkCenterId === wc.docId"
-        (mouseenter)="hoveredWorkCenterId = wc.docId"
-        (mouseleave)="hoveredWorkCenterId = null"
       >
         <span class="wc-name">{{ wc.data.name }}</span>
       </div>
@@ -71,8 +71,9 @@
           class="timeline-row"
           [class.hovered]="hoveredWorkCenterId === wc.docId"
           [style.height.px]="ROW_HEIGHT"
-          (mouseenter)="hoveredWorkCenterId = wc.docId"
-          (mouseleave)="hoveredWorkCenterId = null"
+          (mouseenter)="onRowMouseEnter(wc.docId)"
+          (mouseleave)="onRowMouseLeave()"
+          (mousemove)="onRowMouseMove($event, wc.docId)"
           (click)="onTimelineClick($event, wc)"
         >
           <!-- Column backgrounds -->
@@ -82,9 +83,14 @@
             [style.width.px]="COLUMN_WIDTH"
           ></div>
 
-          <!-- Hover hint (only when row is empty) -->
-          <div class="add-hint" *ngIf="hoveredWorkCenterId === wc.docId && getBarsForCenter(wc.docId).length === 0">
-            <span>Click to add dates</span>
+          <!-- Ghost hover box — shows on ALL rows on hover -->
+          <div
+            class="ghost-box"
+            *ngIf="hoverPreview.visible && hoverPreview.workCenterId === wc.docId"
+            [style.left.px]="hoverPreview.x"
+            [style.width.px]="GHOST_BOX_WIDTH"
+          >
+            <div class="ghost-tooltip">Click to add dates</div>
           </div>
 
           <!-- Work order bars -->
@@ -118,9 +124,6 @@
       </div>
     </div>
   </div>
-
-  <!-- Tooltip -->
-  <!-- Removed tooltip feature -->
 
 </div>
 

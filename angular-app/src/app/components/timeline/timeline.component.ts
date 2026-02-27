@@ -35,13 +35,10 @@ export class TimelineComponent implements OnInit, OnDestroy {
   readonly workCenters = this.svc.workCenters;
   readonly workOrders  = this.svc.workOrders;
   readonly zoomLevel   = this.svc.zoomLevel;
-  
-  window = window;
 
   readonly ROW_HEIGHT    = 52;
   readonly TOTAL_COLUMNS = 120;
 
-  // ── Dynamic column width based on zoom ──────────────────────
   get COLUMN_WIDTH(): number {
     const zoom = this.zoomLevel();
     if (zoom === 'hour')  return 80;
@@ -61,8 +58,16 @@ export class TimelineComponent implements OnInit, OnDestroy {
   panelWorkCenterId:  string | null = null;
 
   openDropdownId: string | null = null;
-
   hoveredWorkCenterId: string | null = null;
+
+  // ── Ghost box hover state ─────────────────────────────────
+  hoverPreview: {
+    visible: boolean;
+    workCenterId: string | null;
+    x: number;
+  } = { visible: false, workCenterId: null, x: 0 };
+
+  readonly GHOST_BOX_WIDTH = 113;
 
   zoomOptions = [
     { value: 'hour',  label: 'Hour'  },
@@ -173,17 +178,57 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   }
 
+  // ── Ghost box mouse handlers ──────────────────────────────
+  onRowMouseEnter(workCenterId: string): void {
+    this.hoveredWorkCenterId = workCenterId;
+    this.hoverPreview.workCenterId = workCenterId;
+    this.cdr.markForCheck();
+  }
+
+  onRowMouseLeave(): void {
+    this.hoveredWorkCenterId = null;
+    this.hoverPreview.visible = false;
+    this.hoverPreview.workCenterId = null;
+    this.cdr.markForCheck();
+  }
+
+  onRowMouseMove(event: MouseEvent, workCenterId: string): void {
+    // Don't show ghost if hovering over an existing bar or dropdown
+    const target = event.target as HTMLElement;
+    if (target.closest('.work-order-bar') || target.closest('.actions-menu')) {
+      this.hoverPreview.visible = false;
+      this.cdr.markForCheck();
+      return;
+    }
+
+    const el   = this.scrollContainer.nativeElement as HTMLElement;
+    const rect = el.getBoundingClientRect();
+    const x    = event.clientX - rect.left + el.scrollLeft;
+
+    this.hoverPreview = {
+      visible: true,
+      workCenterId,
+      x: x - this.GHOST_BOX_WIDTH / 2,
+    };
+    this.cdr.markForCheck();
+  }
+
+  // ── Timeline click → open create panel ───────────────────
   onTimelineClick(event: MouseEvent, workCenter: WorkCenterDocument): void {
     if ((event.target as HTMLElement).closest('.work-order-bar')) return;
+    if ((event.target as HTMLElement).closest('.actions-menu')) return;
+
     const el   = this.scrollContainer.nativeElement as HTMLElement;
     const rect = el.getBoundingClientRect();
     const px   = event.clientX - rect.left + el.scrollLeft;
     const date = this.svc.pixelToDate(px, this.timelineStart, this.COLUMN_WIDTH, this.zoomLevel());
+
     this.panelPrefilledDate = date.toISOString().split('T')[0];
     this.panelWorkCenterId  = workCenter.docId;
     this.panelMode          = 'create';
     this.editingWorkOrder   = null;
     this.isPanelOpen        = true;
+    this.hoverPreview.visible = false;
     this.cdr.markForCheck();
   }
 
@@ -216,8 +261,6 @@ export class TimelineComponent implements OnInit, OnDestroy {
     this.openDropdownId = this.openDropdownId === docId ? null : docId;
     this.cdr.markForCheck();
   }
-
-  // Tooltip methods removed - feature disabled
 
   getStatusLabel(status: WorkOrderStatus): string {
     const map: Record<WorkOrderStatus, string> = {

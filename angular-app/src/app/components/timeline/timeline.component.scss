@@ -6,13 +6,6 @@
   font-family: "Circular-Std", -apple-system, sans-serif;
 }
 
-.scroll-container {
-  width: 957px;
-  height: 785px;
-  background-color: rgba(247, 249, 252, 1);
-
-}
-
 // ─── Toolbar ─────────────────────────────────────────────────
 .toolbar {
   display: flex;
@@ -40,19 +33,17 @@
   font-family: CircularStd-Medium;
   font-size: 24px;
   font-weight: 500;
-  font-style: medium;
-
 }
 
-.timescale-box{
+.timescale-box {
   width: 75px;
-height: 25px;
-border-radius: 5px 0 0 5px;
-background-color: rgba(241, 243, 248, 0.75);
-
+  height: 25px;
+  border-radius: 5px 0 0 5px;
+  background-color: rgba(241, 243, 248, 0.75);
+  display: flex;
+  align-items: center;
 }
 
-// "Timescale | Day ▼" combined pill
 .timescale-control {
   display: flex;
   align-items: center;
@@ -63,17 +54,15 @@ background-color: rgba(241, 243, 248, 0.75);
 }
 
 .timescale-label {
- width: 59px;
-height: 16px;
-color: rgba(104, 113, 150, 1);
-font-family: CircularStd-Book;
-font-size: 13px;
-font-weight: 400;
-font-style: book;
-padding-left: 11px;
-
-
+  width: 59px;
+  height: 16px;
+  color: rgba(104, 113, 150, 1);
+  font-family: CircularStd-Book;
+  font-size: 13px;
+  font-weight: 400;
+  padding-left: 11px;
 }
+
 .timescale-select {
   min-width: 90px;
   position: relative;
@@ -82,10 +71,7 @@ padding-left: 11px;
   font-family: CircularStd-Medium;
   font-size: 13px;
   font-weight: 500;
-  font-style: medium;
   overflow: visible !important;
-
-
 
   .ng-select-container {
     height: 30px !important;
@@ -103,10 +89,7 @@ padding-left: 11px;
     align-items: center !important;
   }
 
-  .ng-value-container {
-    padding: 0 8px !important;
-  }
-
+  .ng-value-container { padding: 0 8px !important; }
   .ng-value-label {
     color: #3e40db !important;
     font-weight: 500 !important;
@@ -114,7 +97,6 @@ padding-left: 11px;
     font-family: "CircularStd-Medium", sans-serif !important;
   }
 
-  // Dropdown arrow styling - match design
   .ng-arrow-wrapper {
     width: 24px !important;
     flex-shrink: 0 !important;
@@ -122,8 +104,6 @@ padding-left: 11px;
     display: flex !important;
     align-items: center !important;
     justify-content: center !important;
-    visibility: visible !important;
-    opacity: 1 !important;
   }
 
   .ng-arrow {
@@ -132,8 +112,6 @@ padding-left: 11px;
     border-style: solid !important;
     width: 0 !important;
     height: 0 !important;
-    visibility: visible !important;
-    opacity: 1 !important;
     display: block !important;
   }
 
@@ -141,16 +119,7 @@ padding-left: 11px;
     border-color: transparent transparent #3e40db !important;
     border-width: 0 6px 6px !important;
   }
-
-  .arrow-icon {
-    width: 16px;
-    height: 16px;
-    color: #3e40db;
-    flex-shrink: 0;
-  }
 }
-
-// Dropdown panel styling moved to global styles.scss with panelClass differentiation
 
 // ─── Grid container ──────────────────────────────────────────
 .grid-container {
@@ -299,30 +268,49 @@ padding-left: 11px;
   border-right: 1px solid #f3f4f6;
 }
 
-// "Click to add dates" hint
-.add-hint {
+// ─── Ghost hover box ─────────────────────────────────────────
+.ghost-box {
   position: absolute;
-  inset: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  top: 6px;
+  bottom: 6px;
+  width: 113px;
+  height: 38px;
+  border: 1px solid rgba(195, 199, 255, 1);
+  border-radius: 8px;
+  background-color: rgba(101, 112, 255, 0.1);
   pointer-events: none;
-  opacity: 0;
-  transition: opacity 0.15s;
-
-  span {
-    background: #374151;
-    color: #fff;
-    font-size: 11px;
-    font-weight: 500;
-    padding: 4px 10px;
-    border-radius: 5px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    white-space: nowrap;
-  }
+  z-index: 1000;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
 }
 
-.timeline-row.hovered .add-hint { opacity: 1; }
+.ghost-tooltip {
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: rgba(104, 113, 150, 1);
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  font-size: 11px;
+  font-weight: 500;
+  color: white;
+  z-index: 1001;
+
+  // Arrow pointing down
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(104, 113, 150, 1);
+  }
+}
 
 // ─── Work order bars ─────────────────────────────────────────
 .work-order-bar {
@@ -372,7 +360,6 @@ padding-left: 11px;
   .status-blocked &     { background: #fde68a; color: #92400e; }
 }
 
-// Only hide badge on very narrow bars, keep name visible
 .narrow .bar-badge { display: none; }
 .narrow .bar-name  { font-size: 11px; }
 
@@ -408,12 +395,13 @@ padding-left: 11px;
 .dropdown-menu {
   position: absolute;
   top: calc(100% + 4px);
-  left: 0;  
-  width: 110px;
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 7px;
-  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  left: 0;
+  width: 200px;
+  background: rgba(255, 255, 255, 1);
+  border-radius: 5px;
+  box-shadow: 0 0 0 1px rgba(104, 113, 150, 0.1),
+              0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
+              0 4.5px 5px -1px rgba(216, 220, 235, 1);
   z-index: 9999;
   padding: 3px;
   opacity: 0;
@@ -427,12 +415,6 @@ padding-left: 11px;
     transform: scale(1);
     pointer-events: all;
     visibility: visible;
-    width: 200px;
-height: 80px;
-box-shadow: 0 0 0 1px rgba(104, 113, 150, 0.1) , 0 2.5px 3px -1.5px rgba(200, 207, 233, 1) , 0 4.5px 5px -1px rgba(216, 220, 235, 1);
-border-radius: 5px;
-background-color: rgba(255, 255, 255, 1);
-
   }
 }
 
@@ -450,11 +432,9 @@ background-color: rgba(255, 255, 255, 1);
   cursor: pointer;
   transition: background 0.1s;
 
- &:hover { background: white; }
-  &.delete { color: rgba(62, 64, 219, 1);
-    
- &:hover { background: white; } }
+  &:hover { background: #f3f4f6; }
+  &.delete {
+    color: rgba(62, 64, 219, 1);
+    &:hover { background: #f3f4f6; }
+  }
 }
-
-// ─── Tooltip (Removed) ───────────────────────────────────────
-// Tooltip feature has been disabled
