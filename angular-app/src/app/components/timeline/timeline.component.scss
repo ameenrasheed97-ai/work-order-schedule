@@ -334,9 +334,12 @@ background-color: rgba(247, 249, 252, 1);
   &:hover { filter: brightness(0.96); }
 
   &.status-open        { background: #ede9fe; }
-  &.status-in-progress { background: #e0e7ff; }
-  &.status-complete    { background: #dcfce7; }
-  &.status-blocked     { background: #fef9c3; }
+  &.status-in-progress {
+    background-color: rgba(238, 240, 255, 1);
+
+  }
+  &.status-complete    { background: rgba(248, 255, 243, 1); }
+  &.status-blocked     { background: rgba(255, 252, 241, 1); }
 }
 
 .bar-name {
@@ -359,9 +362,32 @@ background-color: rgba(247, 249, 252, 1);
   flex-shrink: 0;
 
   .status-open &        { background: #ddd6fe; color: #5b21b6; }
-  .status-in-progress & { background: #c7d2fe; color: #3730a3; }
-  .status-complete &    { background: #bbf7d0; color: #15803d; }
-  .status-blocked &     { background: #fde68a; color: #92400e; }
+  .status-in-progress & {
+    width: 87px;
+    height: 22px;
+    border-radius: 5px;
+    background-color: rgba(214, 216, 255, 1);
+    color: rgba(62, 64, 219, 1);
+    padding-top: 3px;
+    font-size: 14px;;
+
+  }
+  .status-complete & {
+    width: 73px;
+    height: 18px;
+    color: rgba(8, 162, 104, 1);
+    font-size: 14px;
+    font-weight: 400;
+    background-color: rgba(225, 255, 204, 1);
+  }
+  .status-blocked & {
+    border-radius: 5px;
+    height: 18px;
+    color: rgba(177, 54, 0, 1);
+    font-size: 14px;
+    font-weight: 400;
+    background-color: rgba(252, 238, 181, 1);
+  }
 }
 
 .narrow .bar-badge { display: none; }
