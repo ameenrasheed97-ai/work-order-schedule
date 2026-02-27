@@ -38,7 +38,7 @@ html, body {
 
     &.ng-option-marked  { background: #f3f4f6 !important; }
     &.ng-option-selected {
-      background: #eef2ff !important;
+      background: #ffffff !important;
       color: #4338ca !important;
       font-weight: 600 !important;
     }
@@ -79,7 +79,6 @@ html, body {
 
     &.ng-option-selected,
     &:hover:not(.ng-option-disabled) {
-      background-color: rgba(62, 64, 219, 0.08) !important;
       color: #3e40db !important;
     }
   }
