@@ -18,42 +18,42 @@ export const WORK_CENTERS: WorkCenterDocument[] = [
 export const WORK_ORDERS: WorkOrderDocument[] = [
   {
     docId: 'wo-1', docType: 'workOrder',
-    data: { name: 'Batch Run #4421', workCenterId: 'wc-1', status: 'complete', startDate: daysFromToday(-14), endDate: daysFromToday(-8) }
+    data: { name: 'Batch Run #4421', workCenterId: 'wc-1', status: 'complete', startDate: daysFromToday(-150), endDate: daysFromToday(-50) }
   },
   {
     docId: 'wo-2', docType: 'workOrder',
-    data: { name: 'Polymer Mix A', workCenterId: 'wc-1', status: 'in-progress', startDate: daysFromToday(-3), endDate: daysFromToday(5) }
+    data: { name: 'Polymer Mix A', workCenterId: 'wc-1', status: 'in-progress', startDate: daysFromToday(0), endDate: daysFromToday(150) }
   },
   {
     docId: 'wo-3', docType: 'workOrder',
-    data: { name: 'Frame Cut Order', workCenterId: 'wc-2', status: 'open', startDate: daysFromToday(2), endDate: daysFromToday(9) }
+    data: { name: 'Frame Cut Order', workCenterId: 'wc-2', status: 'open', startDate: daysFromToday(-30), endDate: daysFromToday(150) }
   },
   {
     docId: 'wo-4', docType: 'workOrder',
-    data: { name: 'Panel Precision', workCenterId: 'wc-2', status: 'blocked', startDate: daysFromToday(12), endDate: daysFromToday(20) }
+    data: { name: 'Panel Precision', workCenterId: 'wc-2', status: 'blocked', startDate: daysFromToday(40), endDate: daysFromToday(180) }
   },
   {
     docId: 'wo-5', docType: 'workOrder',
-    data: { name: 'Unit Assembly X7', workCenterId: 'wc-3', status: 'in-progress', startDate: daysFromToday(-5), endDate: daysFromToday(3) }
+    data: { name: 'Unit Assembly X7', workCenterId: 'wc-3', status: 'in-progress', startDate: daysFromToday(-60), endDate: daysFromToday(120) }
   },
   {
     docId: 'wo-6', docType: 'workOrder',
-    data: { name: 'Sub-assembly Batch', workCenterId: 'wc-3', status: 'open', startDate: daysFromToday(7), endDate: daysFromToday(15) }
+    data: { name: 'Sub-assembly Batch', workCenterId: 'wc-3', status: 'open', startDate: daysFromToday(20), endDate: daysFromToday(170) }
   },
   {
     docId: 'wo-7', docType: 'workOrder',
-    data: { name: 'QC Inspection Lot 9', workCenterId: 'wc-4', status: 'blocked', startDate: daysFromToday(-2), endDate: daysFromToday(4) }
+    data: { name: 'QC Inspection Lot 9', workCenterId: 'wc-4', status: 'blocked', startDate: daysFromToday(-40), endDate: daysFromToday(130) }
   },
   {
     docId: 'wo-8', docType: 'workOrder',
-    data: { name: 'Final Pack Run', workCenterId: 'wc-5', status: 'open', startDate: daysFromToday(6), endDate: daysFromToday(14) }
+    data: { name: 'Final Pack Run', workCenterId: 'wc-5', status: 'open', startDate: daysFromToday(30), endDate: daysFromToday(160) }
   },
   {
     docId: 'wo-9', docType: 'workOrder',
-    data: { name: 'Weld Frames Batch', workCenterId: 'wc-6', status: 'complete', startDate: daysFromToday(-20), endDate: daysFromToday(-12) }
+    data: { name: 'Weld Frames Batch', workCenterId: 'wc-6', status: 'complete', startDate: daysFromToday(-180), endDate: daysFromToday(-80) }
   },
   {
     docId: 'wo-10', docType: 'workOrder',
-    data: { name: 'Structural Weld Job', workCenterId: 'wc-6', status: 'in-progress', startDate: daysFromToday(-4), endDate: daysFromToday(8) }
+    data: { name: 'Structural Weld Job', workCenterId: 'wc-6', status: 'in-progress', startDate: daysFromToday(-50), endDate: daysFromToday(100) }
   },
 ];
