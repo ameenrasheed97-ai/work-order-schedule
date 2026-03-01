@@ -1,5 +1,5 @@
 import {
-  Component, Input, Output, EventEmitter, OnChanges,
+  Component, Input, Output, EventEmitter, OnChanges, HostListener,
   SimpleChanges, ChangeDetectionStrategy, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
@@ -125,6 +125,13 @@ export class WorkOrderPanelComponent implements OnChanges {
 
   onOverlayClick(event: MouseEvent): void {
     if ((event.target as HTMLElement).classList.contains('panel-overlay')) {
+      this.closed.emit();
+    }
+  }
+
+  @HostListener('keydown.escape')
+  onEscapeKey(): void {
+    if (this.isOpen) {
       this.closed.emit();
     }
   }

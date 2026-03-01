@@ -1,7 +1,7 @@
-<div class="timeline-wrapper">
+<div class="timeline-wrapper" role="main" aria-label="Work order schedule timeline">
 
   <!-- Toolbar -->
-  <div class="toolbar">
+  <div class="toolbar" role="banner">
     <div class="toolbar-top">
       <h1 class="page-title">Work Orders</h1>
     </div>
@@ -20,21 +20,24 @@
           (ngModelChange)="onZoomChange($event)"
           class="timescale-select"
           panelClass="timescale-panel"
+          aria-label="Timeline zoom level - select between Hour, Day, Week, or Month views"
         ></ng-select>
       </div>
     </div>
   </div>
 
   <!-- Grid -->
-  <div class="grid-container">
+  <div class="grid-container" role="table" aria-label="Work order schedule grid with work centers and timeline">
 
     <!-- Left fixed panel -->
-    <div class="left-panel">
-      <div class="left-header">Work Center</div>
+    <div class="left-panel" role="rowheader">
+      <div class="left-header" aria-label="Work center column header">Work Center</div>
       <div
         *ngFor="let wc of workCenters(); trackBy: trackByDocId"
         class="left-row"
+        role="row"
         [class.hovered]="hoveredWorkCenterId === wc.docId"
+        [attr.aria-label]="wc.data.name"
       >
         <span class="wc-name">{{ wc.data.name }}</span>
       </div>
@@ -104,6 +107,10 @@
             (click)="$event.stopPropagation()"
             (mouseenter)="onBarHover(bar.workOrder.docId)"
             (mouseleave)="onBarHoverOut()"
+            role="button"
+            tabindex="0"
+            [attr.aria-label]="bar.workOrder.data.name + ' - ' + getStatusLabel(bar.workOrder.data.status) + ' from ' + (bar.workOrder.data.startDate | date: 'MMM dd') + ' to ' + (bar.workOrder.data.endDate | date: 'MMM dd, yyyy')"
+            aria-describedby="bar-actions"
           >
             <span class="bar-name">{{ bar.workOrder.data.name }}</span>
             <span class="bar-badge">{{ getStatusLabel(bar.workOrder.data.status) }}</span>
@@ -120,15 +127,17 @@
             </div>
 
             <!-- Three-dot menu -->
-            <div class="actions-menu" (click)="toggleDropdown($event, bar.workOrder.docId)">
+            <div class="actions-menu" id="bar-actions" (click)="toggleDropdown($event, bar.workOrder.docId)">
               <button
                 class="actions-btn"
                 [class.active]="openDropdownId === bar.workOrder.docId"
-                aria-label="Actions"
+                aria-label="Work order actions menu for {{ bar.workOrder.data.name }}"
+                aria-haspopup="true"
+                [attr.aria-expanded]="openDropdownId === bar.workOrder.docId"
               >···</button>
-              <div class="dropdown-menu" [class.open]="openDropdownId === bar.workOrder.docId">
-                <button class="dropdown-item" (click)="openEdit(bar.workOrder)">Edit</button>
-                <button class="dropdown-item delete" (click)="deleteWorkOrder(bar.workOrder.docId)">Delete</button>
+              <div class="dropdown-menu" [class.open]="openDropdownId === bar.workOrder.docId" role="menu">
+                <button class="dropdown-item" (click)="openEdit(bar.workOrder)" role="menuitem">Edit</button>
+                <button class="dropdown-item delete" (click)="deleteWorkOrder(bar.workOrder.docId)" role="menuitem">Delete</button>
               </div>
             </div>
           </div>
