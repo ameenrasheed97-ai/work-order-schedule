@@ -152,6 +152,19 @@ An Angular-based work order scheduling application with a visual timeline interf
    - Optimized CSS specificity: Removed unnecessary `!important` declarations, kept only on critical positioning properties (`position`, `left`, `width`, `margin-top`)
    - Updated Angular Budgets in `angular.json`: Increased component style limit from 8kB to 12kB to accommodate timeline styling
 
+8. **Bar Sizing & Sample Data Optimization** (Current Iteration)
+   - **Identified Root Cause:** Original sample data had very short work order durations (6-8 days), making bars appear extremely small
+   - **Solution Implemented:** Created three separate work order datasets optimized for different zoom levels:
+     - `WORK_ORDERS_MONTH` (100-180 day durations) - Looks great in month view with bars spanning multiple months
+     - `WORK_ORDERS_WEEK` (15-35 day durations) - Clean, proportional bars in week view
+     - `WORK_ORDERS_DAY` (2-8 day durations) - Compact detail view for day/hour zoom levels
+   - **Dynamic Loading:** Updated `TimelineService` to automatically load the appropriate dataset when zoom level changes:
+     - Hour/Day zoom → loads `WORK_ORDERS_DAY`
+     - Week zoom → loads `WORK_ORDERS_WEEK`
+     - Month zoom → loads `WORK_ORDERS_MONTH`
+   - **Datepicker Enhancement:** Updated datepicker navigation to use dropdown selectors for month/year selection, enabling efficient date range navigation
+   - **Result:** Timeline now displays properly-proportioned bars across all zoom levels without code changes - the visual adaptation is purely data-driven
+
 ---
 
 ## 📦 Dependencies
@@ -174,7 +187,7 @@ Runs on `http://localhost:4200`
 ---
 
 ## 📋 Current Status
-✅ **UI Styling Complete** - All core features implemented with design-matched styling. Timeline with zoom controls fully functional. Dropdown panel positioned correctly with optimized CSS. Date pickers and status dropdowns integrated. Ready for feature expansion or backend integration.
+✅ **Dynamic Timeline UI Complete** - All core features fully implemented with intelligent zoom-level-based data loading. Timeline bars now display at appropriate proportions across all zoom levels (hour, day, week, month). Datepicker with month/year navigation integrated. Sample data optimized with three separate datasets tailored for each zoom level. Ready for backend integration or additional features.
 
 ---
 
