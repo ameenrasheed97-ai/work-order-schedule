@@ -72,12 +72,15 @@
           #startPicker="ngbDatepicker"
           type="text"
           class="form-input"
+          [class.error]="isInvalid('startDate')"
           formControlName="startDate"
           placeholder="MM/DD/YYYY"
           autocomplete="off"
           aria-required="true"
+          [attr.aria-describedby]="isInvalid('startDate') ? 'start-date-error' : null"
           (click)="startPicker.toggle()"
         />
+        <span class="form-error" id="start-date-error" *ngIf="isInvalid('startDate')" role="alert">Start date is required</span>
       </div>
 
       <!-- End Date -->
@@ -89,12 +92,16 @@
           #endPicker="ngbDatepicker"
           type="text"
           class="form-input"
+          [class.error]="isInvalid('endDate') || form.hasError('endDateBeforeStart')"
           formControlName="endDate"
           placeholder="MM/DD/YYYY"
           autocomplete="off"
           aria-required="true"
+          [attr.aria-describedby]="isInvalid('endDate') || form.hasError('endDateBeforeStart') ? 'end-date-error' : null"
           (click)="endPicker.toggle()"
         />
+        <span class="form-error" id="end-date-error" *ngIf="isInvalid('endDate')" role="alert">End date is required</span>
+        <span class="form-error" id="end-date-error" *ngIf="form.hasError('endDateBeforeStart')" role="alert">End date must be after start date</span>
       </div>
 
       <!-- Overlap error -->

@@ -3,7 +3,7 @@ import {
   SimpleChanges, ChangeDetectionStrategy, inject
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, FormGroup, FormControl, Validators, ValidationErrors, AbstractControl } from '@angular/forms';
 import { NgSelectModule } from '@ng-select/ng-select';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { WorkOrderDocument, WorkOrderStatus, PanelMode } from '../../models';
@@ -43,9 +43,21 @@ export class WorkOrderPanelComponent implements OnChanges {
     this.form = this.fb.group({
       name:      ['', Validators.required],
       status:    ['open', Validators.required],
-      startDate: [null],
-      endDate:   [null],
-    });
+      startDate: [null, Validators.required],
+      endDate:   [null, Validators.required],
+    }, { validators: this.endDateAfterStartDate });
+  }
+
+  private endDateAfterStartDate(control: AbstractControl): ValidationErrors | null {
+    const startDate = control.get('startDate')?.value;
+    const endDate = control.get('endDate')?.value;
+
+    if (!startDate || !endDate) return null;
+
+    const start = new Date(startDate.year, startDate.month - 1, startDate.day);
+    const end = new Date(endDate.year, endDate.month - 1, endDate.day);
+
+    return end > start ? null : { endDateBeforeStart: true };
   }
 
   ngOnChanges(changes: SimpleChanges): void {
