@@ -401,15 +401,15 @@ background-color: rgba(247, 249, 252, 1);
   transform: translateX(-50%);
   margin-bottom: 12px;
   padding: 10px 12px;
-  background: rgba(55, 65, 81, 0.95);
+  background: rgba(91, 95, 199, 0.95);
   border-radius: 6px;
   color: white;
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
-  z-index: 9999;
+  z-index: 99999;
   pointer-events: none;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 4px 12px rgba(91, 95, 199, 0.3);
   animation: tooltipFadeIn 0.15s ease-out;
 
   // Arrow pointing down
@@ -420,7 +420,7 @@ background-color: rgba(247, 249, 252, 1);
     left: 50%;
     transform: translateX(-50%);
     border: 5px solid transparent;
-    border-top-color: rgba(55, 65, 81, 0.95);
+    border-top-color: rgba(91, 95, 199, 0.95);
   }
 }
 
