@@ -5,7 +5,8 @@ import {
   WORK_ORDERS, 
   WORK_ORDERS_MONTH, 
   WORK_ORDERS_WEEK, 
-  WORK_ORDERS_DAY 
+  WORK_ORDERS_DAY,
+  WORK_ORDERS_HOUR
 } from '../data/sample-data';
 
 @Injectable({ providedIn: 'root' })
@@ -49,7 +50,7 @@ export class TimelineService {
   }
 
   private getWorkOrdersForZoom(level: ZoomLevel): WorkOrderDocument[] {
-    if (level === 'hour') return WORK_ORDERS_DAY;
+    if (level === 'hour') return WORK_ORDERS_HOUR;
     if (level === 'day')  return WORK_ORDERS_DAY;
     if (level === 'week') return WORK_ORDERS_WEEK;
     return WORK_ORDERS_MONTH;

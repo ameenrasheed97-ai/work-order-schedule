@@ -32,6 +32,12 @@ describe('TimelineComponent', () => {
     expect(workCenterElements.length).toBeGreaterThan(0);
   });
 
+  it('should have correct column width for hour zoom', () => {
+    timelineService.setZoomLevel('hour');
+    fixture.detectChanges();
+    expect(component.COLUMN_WIDTH).toBe(80);
+  });
+
   it('should have correct column width for month zoom', () => {
     timelineService.setZoomLevel('month');
     fixture.detectChanges();

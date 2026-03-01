@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { TimelineService } from './timeline.service';
-import { WORK_CENTERS, WORK_ORDERS_MONTH } from '../data/sample-data';
+import { WORK_CENTERS, WORK_ORDERS_MONTH, WORK_ORDERS_HOUR } from '../data/sample-data';
 
 describe('TimelineService', () => {
   let service: TimelineService;
@@ -29,6 +29,24 @@ describe('TimelineService', () => {
     expect(service.zoomLevel()).toBe('day');
   });
 
+  it('should load correct work orders for hour zoom level', () => {
+    service.setZoomLevel('hour');
+    expect(service.zoomLevel()).toBe('hour');
+    expect(service.workOrders().length).toBeGreaterThan(0);
+  });
+
+  it('should load correct work orders for day zoom level', () => {
+    service.setZoomLevel('day');
+    expect(service.zoomLevel()).toBe('day');
+    expect(service.workOrders().length).toBeGreaterThan(0);
+  });
+
+  it('should load correct work orders for week zoom level', () => {
+    service.setZoomLevel('week');
+    expect(service.zoomLevel()).toBe('week');
+    expect(service.workOrders().length).toBeGreaterThan(0);
+  });
+
   it('should filter work orders by work center', () => {
     const wc1Orders = service.getWorkOrdersForCenter('wc-1');
     expect(wc1Orders.length).toBeGreaterThan(0);
@@ -49,10 +67,12 @@ describe('TimelineService', () => {
     const startDate = new Date('2026-03-01');
     const count = 10;
 
+    const hourColumns = service.generateColumns(startDate, count, 'hour');
     const dayColumns = service.generateColumns(startDate, count, 'day');
     const weekColumns = service.generateColumns(startDate, count, 'week');
     const monthColumns = service.generateColumns(startDate, count, 'month');
 
+    expect(hourColumns.length).toBe(count);
     expect(dayColumns.length).toBe(count);
     expect(weekColumns.length).toBe(count);
     expect(monthColumns.length).toBe(count);
@@ -61,13 +81,16 @@ describe('TimelineService', () => {
   it('should format column labels correctly', () => {
     const date = new Date('2026-03-01');
 
+    const hourLabel = service.formatColumnLabel(date, 'hour');
     const dayLabel = service.formatColumnLabel(date, 'day');
     const weekLabel = service.formatColumnLabel(date, 'week');
     const monthLabel = service.formatColumnLabel(date, 'month');
 
+    expect(hourLabel).toBeTruthy();
     expect(dayLabel).toBeTruthy();
     expect(weekLabel).toBeTruthy();
     expect(monthLabel).toBeTruthy();
+  });
   });
 
   it('should convert dates to pixel positions', () => {

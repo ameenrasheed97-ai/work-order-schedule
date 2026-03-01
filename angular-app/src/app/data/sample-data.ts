@@ -147,5 +147,56 @@ export const WORK_ORDERS_DAY: WorkOrderDocument[] = [
   },
 ];
 
+// Helper function to generate dates with specific hours
+function hoursFromNow(hours: number): string {
+  const d = new Date();
+  d.setHours(d.getHours() + hours);
+  return d.toISOString().split('T')[0];
+}
+
+// Work orders for HOUR view (very short durations in hours)
+export const WORK_ORDERS_HOUR: WorkOrderDocument[] = [
+  {
+    docId: 'wo-1', docType: 'workOrder',
+    data: { name: 'Rapid Setup #1', workCenterId: 'wc-1', status: 'in-progress', startDate: hoursFromNow(-3), endDate: hoursFromNow(1) }
+  },
+  {
+    docId: 'wo-2', docType: 'workOrder',
+    data: { name: 'Quick Cycle Test', workCenterId: 'wc-1', status: 'open', startDate: hoursFromNow(2), endDate: hoursFromNow(6) }
+  },
+  {
+    docId: 'wo-3', docType: 'workOrder',
+    data: { name: 'Precision Cut A', workCenterId: 'wc-2', status: 'in-progress', startDate: hoursFromNow(-2), endDate: hoursFromNow(2) }
+  },
+  {
+    docId: 'wo-4', docType: 'workOrder',
+    data: { name: 'Slot Milling Job', workCenterId: 'wc-2', status: 'open', startDate: hoursFromNow(3), endDate: hoursFromNow(7) }
+  },
+  {
+    docId: 'wo-5', docType: 'workOrder',
+    data: { name: 'Sub-assembly CHK', workCenterId: 'wc-3', status: 'complete', startDate: hoursFromNow(-5), endDate: hoursFromNow(-1) }
+  },
+  {
+    docId: 'wo-6', docType: 'workOrder',
+    data: { name: 'Final Inspection', workCenterId: 'wc-3', status: 'in-progress', startDate: hoursFromNow(0), endDate: hoursFromNow(4) }
+  },
+  {
+    docId: 'wo-7', docType: 'workOrder',
+    data: { name: 'Quality Verify X', workCenterId: 'wc-4', status: 'open', startDate: hoursFromNow(1), endDate: hoursFromNow(5) }
+  },
+  {
+    docId: 'wo-8', docType: 'workOrder',
+    data: { name: 'Pack & Ship', workCenterId: 'wc-5', status: 'blocked', startDate: hoursFromNow(-1), endDate: hoursFromNow(3) }
+  },
+  {
+    docId: 'wo-9', docType: 'workOrder',
+    data: { name: 'Weld Prep', workCenterId: 'wc-6', status: 'complete', startDate: hoursFromNow(-6), endDate: hoursFromNow(-2) }
+  },
+  {
+    docId: 'wo-10', docType: 'workOrder',
+    data: { name: 'Stress Test Run', workCenterId: 'wc-6', status: 'open', startDate: hoursFromNow(4), endDate: hoursFromNow(8) }
+  },
+];
+
 // Default export for backward compatibility (MONTH view)
 export const WORK_ORDERS: WorkOrderDocument[] = WORK_ORDERS_MONTH;
