@@ -20,8 +20,8 @@ describe('TimelineService', () => {
     expect(service.workCenters()).toEqual(WORK_CENTERS);
   });
 
-  it('should have initial zoom level of month', () => {
-    expect(service.zoomLevel()).toBe('month');
+  it('should have initial zoom level of day', () => {
+    expect(service.zoomLevel()).toBe('day');
   });
 
   it('should set zoom level', () => {
@@ -90,7 +90,6 @@ describe('TimelineService', () => {
     expect(dayLabel).toBeTruthy();
     expect(weekLabel).toBeTruthy();
     expect(monthLabel).toBeTruthy();
-  });
   });
 
   it('should convert dates to pixel positions', () => {
