@@ -53,7 +53,7 @@
   overflow: visible;
   background: #fff;
   margin-right: auto;
-   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .btn-today {
@@ -91,7 +91,6 @@
 .timescale-select {
   width: 71px;
   border-radius: 0 5px 5px 0;
-
   position: relative;
   margin-left: 5px;
   color: rgba(62, 64, 219, 1);
@@ -100,51 +99,56 @@
   font-weight: 500;
   overflow: visible !important;
 
-  .ng-select-container {
-    height: 30px !important;
-    min-height: 30px !important;
-    border: none !important;
-    border-radius: 0 5px 5px 0 !important;
-    background: transparent !important;
-    font-family: "CircularStd-Medium", sans-serif !important;
-    font-size: 13px !important;
-    font-weight: 500 !important;
-    color: #3e40db !important;
-    box-shadow: none !important;
-    cursor: pointer !important;
-    display: flex !important;
-    align-items: center !important;
-  }
+  ::ng-deep {
+    .ng-select-container {
+      height: 30px !important;
+      min-height: 30px !important;
+      border: none !important;
+      border-radius: 0 5px 5px 0 !important;
+      background: transparent !important;
+      font-family: "CircularStd-Medium", sans-serif !important;
+      font-size: 13px !important;
+      font-weight: 500 !important;
+      color: #3e40db !important;
+      box-shadow: none !important;
+      cursor: pointer !important;
+      display: flex !important;
+      align-items: center !important;
+    }
 
-  .ng-value-container { padding: 0 8px !important; }
-  .ng-value-label {
-    color: #3e40db !important;
-    font-weight: 500 !important;
-    font-size: 13px !important;
-    font-family: "CircularStd-Medium", sans-serif !important;
-  }
+    .ng-value-container {
+      padding: 0 8px !important;
+    }
 
-  .ng-arrow-wrapper {
-    width: 24px !important;
-    flex-shrink: 0 !important;
-    padding: 0 6px !important;
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-  }
+    .ng-value-label {
+      color: #3e40db !important;
+      font-weight: 500 !important;
+      font-size: 13px !important;
+      font-family: "CircularStd-Medium", sans-serif !important;
+    }
 
-  .ng-arrow {
-    border-color: #3e40db transparent transparent !important;
-    border-width: 6px 6px 0 !important;
-    border-style: solid !important;
-    width: 0 !important;
-    height: 0 !important;
-    display: block !important;
-  }
+    .ng-arrow-wrapper {
+      width: 24px !important;
+      flex-shrink: 0 !important;
+      padding: 0 6px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+    }
 
-  &.ng-select-opened .ng-arrow {
-    border-color: transparent transparent #3e40db !important;
-    border-width: 0 6px 6px !important;
+    .ng-arrow {
+      border-color: #3e40db transparent transparent !important;
+      border-width: 5px 5px 0 !important;
+      border-style: solid !important;
+      width: 0 !important;
+      height: 0 !important;
+      display: block !important;
+    }
+
+    &.ng-select-opened .ng-arrow-wrapper .ng-arrow {
+      border-color: transparent transparent #3e40db !important;
+      border-width: 0 5px 5px !important;
+    }
   }
 }
 
@@ -203,9 +207,8 @@
 // ─── Scroll area ─────────────────────────────────────────────
 .scroll-container {
   width: 957px;
-height: 785px;
-background-color: rgba(247, 249, 252, 1);
-
+  height: 785px;
+  background-color: rgba(247, 249, 252, 1);
   flex: 1;
   overflow-x: auto;
   overflow-y: auto;
@@ -331,7 +334,6 @@ background-color: rgba(247, 249, 252, 1);
   color: white;
   z-index: 1001;
 
-  // Arrow pointing down
   &::after {
     content: '';
     position: absolute;
@@ -361,10 +363,7 @@ background-color: rgba(247, 249, 252, 1);
   &:hover { filter: brightness(0.96); }
 
   &.status-open        { background: #ede9fe; }
-  &.status-in-progress {
-    background-color: rgba(238, 240, 255, 1);
-
-  }
+  &.status-in-progress { background-color: rgba(238, 240, 255, 1); }
   &.status-complete    { background: rgba(248, 255, 243, 1); }
   &.status-blocked     { background: rgba(255, 252, 241, 1); }
 }
@@ -396,8 +395,7 @@ background-color: rgba(247, 249, 252, 1);
     background-color: rgba(214, 216, 255, 1);
     color: rgba(62, 64, 219, 1);
     padding-top: 3px;
-    font-size: 14px;;
-
+    font-size: 14px;
   }
   .status-complete & {
     width: 73px;
@@ -439,7 +437,6 @@ background-color: rgba(247, 249, 252, 1);
   box-shadow: 0 4px 12px rgba(91, 95, 199, 0.3);
   animation: tooltipFadeIn 0.15s ease-out;
 
-  // Arrow pointing down
   &::after {
     content: '';
     position: absolute;
