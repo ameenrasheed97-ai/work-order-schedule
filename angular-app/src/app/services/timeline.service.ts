@@ -12,7 +12,7 @@ import {
 @Injectable({ providedIn: 'root' })
 export class TimelineService {
   private _workCenters = signal<WorkCenterDocument[]>(this.loadWorkCenters());
-  private _zoomLevel   = signal<ZoomLevel>('month');
+  private _zoomLevel   = signal<ZoomLevel>(this.loadZoomLevel());
   private _workOrders  = signal<WorkOrderDocument[]>(this.loadWorkOrders());
 
   readonly workCenters = this._workCenters.asReadonly();
@@ -27,18 +27,27 @@ export class TimelineService {
     return WORK_CENTERS;
   }
 
+  private loadZoomLevel(): ZoomLevel {
+    if (typeof window !== 'undefined' && localStorage) {
+      const stored = localStorage.getItem('zoomLevel');
+      return (stored as ZoomLevel) || 'day';
+    }
+    return 'day';
+  }
+
   private loadWorkOrders(): WorkOrderDocument[] {
     if (typeof window !== 'undefined' && localStorage) {
       const stored = localStorage.getItem('workOrders');
-      return stored ? JSON.parse(stored) : WORK_ORDERS_MONTH;
+      return stored ? JSON.parse(stored) : WORK_ORDERS_DAY;
     }
-    return WORK_ORDERS_MONTH;
+    return WORK_ORDERS_DAY;
   }
 
   private persist(): void {
     if (typeof window !== 'undefined' && localStorage) {
       localStorage.setItem('workCenters', JSON.stringify(this._workCenters()));
       localStorage.setItem('workOrders',  JSON.stringify(this._workOrders()));
+      localStorage.setItem('zoomLevel',   this._zoomLevel());
     }
   }
 
@@ -47,6 +56,7 @@ export class TimelineService {
     // Switch work orders based on zoom level
     const workOrdersForZoom = this.getWorkOrdersForZoom(level);
     this._workOrders.set(workOrdersForZoom);
+    this.persist();
   }
 
   private getWorkOrdersForZoom(level: ZoomLevel): WorkOrderDocument[] {
