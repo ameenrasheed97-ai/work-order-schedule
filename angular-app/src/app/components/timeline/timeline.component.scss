@@ -13,6 +13,7 @@
   padding: 24px 28px 14px;
   flex-shrink: 0;
   gap: 10px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .toolbar-top {
@@ -37,7 +38,7 @@
 
 .timescale-box {
   width: 75px;
-  height: 25px;
+  height: 32px;
   border-radius: 5px 0 0 5px;
   background-color: rgba(241, 243, 248, 0.75);
   display: flex;
@@ -52,6 +53,7 @@
   overflow: visible;
   background: #fff;
   margin-right: auto;
+   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .btn-today {
@@ -87,7 +89,9 @@
 }
 
 .timescale-select {
-  min-width: 90px;
+  width: 71px;
+  border-radius: 0 5px 5px 0;
+
   position: relative;
   margin-left: 5px;
   color: rgba(62, 64, 219, 1);
