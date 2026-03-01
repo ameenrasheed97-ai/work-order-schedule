@@ -102,9 +102,22 @@
             [style.width.px]="bar.width"
             [style.zIndex]="openDropdownId === bar.workOrder.docId ? 100 : 2"
             (click)="$event.stopPropagation()"
+            (mouseenter)="onBarHover(bar.workOrder.docId)"
+            (mouseleave)="onBarHoverOut()"
           >
             <span class="bar-name">{{ bar.workOrder.data.name }}</span>
             <span class="bar-badge">{{ getStatusLabel(bar.workOrder.data.status) }}</span>
+
+            <!-- Bar Hover Tooltip -->
+            <div class="bar-tooltip" *ngIf="hoveredBarId === bar.workOrder.docId">
+              <div class="tooltip-content">
+                <div class="tooltip-title">{{ bar.workOrder.data.name }}</div>
+                <div class="tooltip-status">{{ getStatusLabel(bar.workOrder.data.status) }}</div>
+                <div class="tooltip-dates">
+                  {{ bar.workOrder.data.startDate | date: 'MMM dd' }} - {{ bar.workOrder.data.endDate | date: 'MMM dd, yyyy' }}
+                </div>
+              </div>
+            </div>
 
             <!-- Three-dot menu -->
             <div class="actions-menu" (click)="toggleDropdown($event, bar.workOrder.docId)">

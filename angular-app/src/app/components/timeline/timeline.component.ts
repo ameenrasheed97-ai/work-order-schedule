@@ -59,6 +59,7 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   openDropdownId: string | null = null;
   hoveredWorkCenterId: string | null = null;
+  hoveredBarId: string | null = null;
 
   // ── Ghost box hover state ─────────────────────────────────
   hoverPreview: {
@@ -210,6 +211,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
       workCenterId,
       x: x - this.GHOST_BOX_WIDTH / 2,
     };
+    this.cdr.markForCheck();
+  }
+
+  // ── Bar hover tooltip ────────────────────────────────────
+  onBarHover(barId: string): void {
+    this.hoveredBarId = barId;
+    this.cdr.markForCheck();
+  }
+
+  onBarHoverOut(): void {
+    this.hoveredBarId = null;
     this.cdr.markForCheck();
   }
 

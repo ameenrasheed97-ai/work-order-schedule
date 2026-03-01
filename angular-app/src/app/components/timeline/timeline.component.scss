@@ -393,6 +393,72 @@ background-color: rgba(247, 249, 252, 1);
 .narrow .bar-badge { display: none; }
 .narrow .bar-name  { font-size: 11px; }
 
+// ─── Bar hover tooltip ────────────────────────────────────────
+.bar-tooltip {
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-bottom: 12px;
+  padding: 10px 12px;
+  background: rgba(55, 65, 81, 0.95);
+  border-radius: 6px;
+  color: white;
+  font-size: 12px;
+  font-weight: 500;
+  white-space: nowrap;
+  z-index: 9999;
+  pointer-events: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: tooltipFadeIn 0.15s ease-out;
+
+  // Arrow pointing down
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    border: 5px solid transparent;
+    border-top-color: rgba(55, 65, 81, 0.95);
+  }
+}
+
+.tooltip-content {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.tooltip-title {
+  font-weight: 600;
+  font-size: 13px;
+  color: #fff;
+}
+
+.tooltip-status {
+  font-size: 11px;
+  color: #e5e7eb;
+  text-transform: capitalize;
+}
+
+.tooltip-dates {
+  font-size: 11px;
+  color: #d1d5db;
+  margin-top: 3px;
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
 // ─── Three-dot actions menu ───────────────────────────────────
 .actions-menu {
   position: relative;
