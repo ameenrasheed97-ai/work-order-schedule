@@ -400,6 +400,14 @@ background-color: rgba(247, 249, 252, 1);
   margin-left: auto;
   overflow: visible;
   z-index: 10;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+
+  .work-order-bar:hover & {
+    opacity: 1;
+    pointer-events: auto;
+  }
 }
 
 .actions-btn {
