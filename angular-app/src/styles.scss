@@ -1,0 +1,94 @@
+@import url('https://naologic-com-assets.naologic.com/fonts/circular-std/circular-std.css');
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: "Circular-Std", -apple-system, BlinkMacSystemFont, sans-serif;
+  background: #fff;
+  color: #111827;
+  -webkit-font-smoothing: antialiased;
+}
+
+// ─── Global ng-select dropdown panel ────────────────────────
+.ng-dropdown-panel {
+  background: #fff !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 8px !important;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.1) !important;
+  margin-top: 4px !important;
+  padding: 4px !important;
+  font-family: "Circular-Std", sans-serif;
+
+  .ng-dropdown-panel-items {
+    border-radius: 6px;
+    overflow: hidden;
+  }
+
+  .ng-option {
+    background: transparent !important;
+    color: #374151 !important;
+    font-size: 13px !important;
+    font-family: "Circular-Std", sans-serif !important;
+    padding: 8px 12px !important;
+    border-radius: 5px !important;
+    transition: background 0.1s;
+
+    &.ng-option-marked  { background: #f3f4f6 !important; }
+    &.ng-option-selected {
+      background: #ffffff !important;
+      color: #4338ca !important;
+      font-weight: 600 !important;
+    }
+  }
+}
+
+// Status dropdown in panel — options with colored pills
+.status-select .ng-dropdown-panel {
+  .ng-option {
+    padding: 6px 10px !important;
+  }
+}
+
+// Timescale panel - custom positioning and styling
+.timescale-select .ng-dropdown-panel,
+.ng-dropdown-panel.timescale-panel {
+  position: absolute !important;
+  width: 200px !important;
+  margin-top: 8px !important;
+  margin-left: -79px !important;
+  min-height: 136px !important;
+  border-radius: 5px !important;
+  background-color: rgba(255, 255, 255, 1) !important;
+  box-shadow: 
+    0 0 0 1px rgba(104, 113, 150, 0.1),
+    0 2.5px 3px -1.5px rgba(200, 207, 233, 1),
+    0 4.5px 5px -1px rgba(216, 220, 235, 1) !important;
+
+  .ng-dropdown-panel-items {
+    padding: 12px 0 !important;
+  }
+
+  .ng-option {
+    padding: 8px 12px !important;
+    font-size: 13px !important;
+    // font-family: "CircularStd-Medium", sans-serif !important;
+    color: #111827 !important;
+
+    &.ng-option-selected,
+    &:hover:not(.ng-option-disabled) {
+      color: #3e40db !important;
+    }
+  }
+}
+
+// Status panel - default positioning with margin-left: 0
+.ng-dropdown-panel.status-panel {
+  margin-left: 0 !important;
+
+  .ng-option {
+    padding: 6px 10px !important;
+  }
+}

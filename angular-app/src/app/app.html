@@ -1,0 +1,56 @@
+<!-- Work Order Schedule Application -->
+<style>
+  :host {
+    font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Helvetica, Arial, sans-serif;
+  }
+
+  main {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    margin: 0;
+    padding: 0;
+  }
+
+  .app-header {
+    background: linear-gradient(90deg, #2563eb 0%, #1e40af 100%);
+    color: white;
+    padding: 20px 40px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+
+  .app-header h1 {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 600;
+  }
+
+  .app-content {
+    flex: 1;
+    padding: 20px 40px;
+    overflow-y: auto;
+  }
+
+  .app-toolbar {
+    margin-bottom: 20px;
+  }
+</style>
+
+<main>
+  <div class="app-header">
+    <h1>{{ title() }}</h1>
+  </div>
+
+  <div class="app-content">
+    <div class="app-toolbar">
+      <app-work-order-panel></app-work-order-panel>
+    </div>
+
+    <app-timeline></app-timeline>
+  </div>
+</main>
+
+

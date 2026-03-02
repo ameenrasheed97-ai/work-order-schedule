@@ -1,0 +1,118 @@
+<div class="panel-overlay" [class.active]="isOpen" (click)="onOverlayClick($event)">
+  <div class="panel" [class.open]="isOpen" role="dialog" aria-modal="true" aria-labelledby="panel-title" aria-describedby="panel-subtitle">
+
+    <!-- Panel header bar -->
+    <div class="panel-header">
+      <div class="panel-header-left">
+        <h2 class="panel-title" id="panel-title">{{ title }}</h2>
+        <p class="panel-subtitle" id="panel-subtitle">{{ subtitle }}</p>
+      </div>
+      <div class="panel-header-actions">
+        <button type="button" class="btn-cancel" (click)="onCancel()" aria-label="Cancel - Close the work order panel"><span class="btn-cancel-txt">Cancel</span></button>
+        <button type="button" class="btn-create" (click)="onSubmit()" aria-label="{{ submitLabel }} - {{ submitLabel === 'Create' ? 'Create a new' : 'Save the' }} work order"><span class="btn-create-txt">{{ submitLabel }}</span></button>
+      </div>
+    </div>
+
+    <!-- Panel body / form -->
+    <form [formGroup]="form" (ngSubmit)="onSubmit()" class="panel-body" novalidate aria-label="Work order form">
+
+      <!-- Work Order Name -->
+      <div class="form-field">
+        <label class="form-label" for="name-input">Work Order Name</label>
+        <input
+          id="name-input"
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('name')"
+          formControlName="name"
+          placeholder="e.g. McMarrow Distribution"
+          autocomplete="off"
+          aria-required="true"
+          [attr.aria-describedby]="isInvalid('name') ? 'name-error' : null"
+        />
+        <span class="form-error" id="name-error" *ngIf="isInvalid('name')" role="alert">Name is required</span>
+      </div>
+
+      <!-- Status -->
+      <div class="form-field">
+        <label class="form-label" for="status-select">Status</label>
+        <ng-select
+          id="status-select"
+          formControlName="status"
+          [items]="statusOptions"
+          bindValue="value"
+          bindLabel="label"
+          [clearable]="false"
+          [searchable]="false"
+          class="status-select"
+          panelClass="status-panel"
+          aria-required="true"
+          [attr.aria-describedby]="isInvalid('status') ? 'status-error' : null"
+        >
+          <ng-template ng-option-tmp let-item="item">
+            <span>{{ item.label }}</span>
+          </ng-template>
+          <ng-template ng-label-tmp let-item="item">
+            <span class="status-pill"
+              [style.color]="item.color"
+              [style.background]="item.color + '20'">
+              {{ item.label }}
+            </span>
+          </ng-template>
+        </ng-select>
+        <span class="form-error" id="status-error" *ngIf="isInvalid('status')" role="alert">Status is required</span>
+      </div>
+
+      <!-- Start Date -->
+      <div class="form-field">
+        <label class="form-label" for="start-date-input">Start date</label>
+        <input
+          id="start-date-input"
+          ngbDatepicker
+          #startPicker="ngbDatepicker"
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('startDate')"
+          formControlName="startDate"
+          placeholder="MM/DD/YYYY"
+          autocomplete="off"
+          aria-required="true"
+          [attr.aria-describedby]="isInvalid('startDate') ? 'start-date-error' : null"
+          (click)="startPicker.toggle()"
+        />
+        <span class="form-error" id="start-date-error" *ngIf="isInvalid('startDate')" role="alert">Start date is required</span>
+      </div>
+
+      <!-- End Date -->
+      <div class="form-field">
+        <label class="form-label" for="end-date-input">End date</label>
+        <input
+          id="end-date-input"
+          ngbDatepicker
+          #endPicker="ngbDatepicker"
+          type="text"
+          class="form-input"
+          [class.error]="isInvalid('endDate') || form.hasError('endDateBeforeStart')"
+          formControlName="endDate"
+          placeholder="MM/DD/YYYY"
+          autocomplete="off"
+          aria-required="true"
+          [attr.aria-describedby]="isInvalid('endDate') || form.hasError('endDateBeforeStart') ? 'end-date-error' : null"
+          (click)="endPicker.toggle()"
+        />
+        <span class="form-error" id="end-date-error" *ngIf="isInvalid('endDate')" role="alert">End date is required</span>
+        <span class="form-error" id="end-date-error" *ngIf="form.hasError('endDateBeforeStart')" role="alert">End date must be after start date</span>
+      </div>
+
+      <!-- Overlap error -->
+      <div class="overlap-error" *ngIf="overlapError" role="alert" aria-live="assertive">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none" aria-hidden="true">
+          <circle cx="7" cy="7" r="6" stroke="currentColor" stroke-width="1.3"/>
+          <path d="M7 4.5v3M7 9.5v.3" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/>
+        </svg>
+        This work order overlaps with an existing one on the same work center.
+      </div>
+
+    </form>
+  </div>
+</div>
