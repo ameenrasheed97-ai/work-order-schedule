@@ -4,7 +4,12 @@
   background: transparent;
   z-index: 1000;
   pointer-events: none;
-  &.active { pointer-events: all; }
+  
+  &.active {
+    pointer-events: all;
+    background: rgba(247, 249, 252, 0.85);
+
+  }
 }
 
 .panel {
