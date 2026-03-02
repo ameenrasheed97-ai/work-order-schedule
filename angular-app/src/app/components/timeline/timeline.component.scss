@@ -31,7 +31,7 @@
   width: 142px;
   height: 34px;
   color: rgba(3, 9, 41, 1);
-  font-family: CircularStd-Medium;
+  // font-family: CircularStd-Medium;
   font-size: 24px;
   font-weight: 500;
 }
@@ -63,7 +63,7 @@
   border: none;
   background: #e5e7eb;
   color: #374151;
-  font-family: CircularStd-Medium;
+  // font-family: CircularStd-Medium;
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
@@ -82,9 +82,9 @@
   width: 59px;
   height: 16px;
   color: rgba(104, 113, 150, 1);
-  font-family: CircularStd-Book;
+  // font-family: CircularStd-Book;
   font-size: 13px;
-  font-weight: 400;
+  font-weight: 500;
   padding-left: 11px;
 }
 
@@ -94,7 +94,7 @@
   position: relative;
   margin-left: 5px;
   color: rgba(62, 64, 219, 1);
-  font-family: CircularStd-Medium;
+  // font-family: CircularStd-Medium;
   font-size: 13px;
   font-weight: 500;
   overflow: visible !important;
@@ -106,7 +106,7 @@
       border: none !important;
       border-radius: 0 5px 5px 0 !important;
       background: transparent !important;
-      font-family: "CircularStd-Medium", sans-serif !important;
+      // font-family: "CircularStd-Medium", sans-serif !important;
       font-size: 13px !important;
       font-weight: 500 !important;
       color: #3e40db !important;
@@ -122,32 +122,31 @@
 
     .ng-value-label {
       color: #3e40db !important;
-      font-weight: 500 !important;
+      font-weight: 600 !important;
       font-size: 13px !important;
-      font-family: "CircularStd-Medium", sans-serif !important;
+      // font-family: "CircularStd-Medium", sans-serif !important;
+    }
+
+    .ng-select-container {
+      position: relative;
+    }
+
+    .ng-select-container::after {
+      content: '';
+      position: absolute;
+      right: 8px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 14px;
+      height: 14px;
+      background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="%236b7280" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>');
+      background-size: contain;
+      background-repeat: no-repeat;
+      pointer-events: none;
     }
 
     .ng-arrow-wrapper {
-      width: 24px !important;
-      flex-shrink: 0 !important;
-      padding: 0 6px !important;
-      display: flex !important;
-      align-items: center !important;
-      justify-content: center !important;
-    }
-
-    .ng-arrow {
-      border-color: #3e40db transparent transparent !important;
-      border-width: 5px 5px 0 !important;
-      border-style: solid !important;
-      width: 0 !important;
-      height: 0 !important;
-      display: block !important;
-    }
-
-    &.ng-select-opened .ng-arrow-wrapper .ng-arrow {
-      border-color: transparent transparent #3e40db !important;
-      border-width: 0 5px 5px !important;
+      display: none !important;
     }
   }
 }
