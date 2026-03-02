@@ -145,7 +145,7 @@ export class TimelineService {
       return `${date.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })} – ${end.toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}`;
     }
     // month
-    return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    return date.toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
   }
 
   // ─── Coordinate conversion ──────────────────────────────────

@@ -177,7 +177,7 @@
   display: flex;
   align-items: center;
   padding: 0 20px;
-  font-size: 11px;
+  font-size: 14px;
   font-weight: 500;
   color: #9ca3af;
   border-bottom: 1px solid #e5e7eb;
@@ -195,12 +195,19 @@
 }
 
 .wc-name {
-  font-size: 13px;
-  font-weight: 400;
-  color: #374151;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  // font-size: 13px;
+  // font-weight: 400;
+  // color: #374151;
+  // white-space: nowrap;
+  // overflow: hidden;
+  // text-overflow: ellipsis;
+  width: 144px;
+height: 16px;
+color: rgba(3, 9, 41, 1);
+// font-family: CircularStd-Regular;
+font-size: 14px;
+font-weight: 500;
+
 }
 
 // ─── Scroll area ─────────────────────────────────────────────
@@ -256,20 +263,29 @@
 
 .current-badge {
   position: absolute;
-  top: 5px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 9px;
-  font-weight: 500;
-  color: #5b5fc7;
-  background: #eef0ff;
-  border-radius: 4px;
-  padding: 1px 6px;
-  white-space: nowrap;
-  line-height: 1.6;
+    width: 104px;
+    top: 42px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 14px;
+    font-weight: 500;
+    color: #5b5fc7;
+    background: #eef0ff;
+    border-radius: 4px;
+    padding: 1px 6px;
+    white-space: nowrap;
+    line-height: 1.6;
 }
 
 .header-cell-label {
+  width: 86px;
+  height: 16px;
+  color: rgba(104, 113, 150, 1);
+  //font-family: CircularStd-Regular;
+  font-size: 14px;
+  font-weight: 500;
+  text-align: center;
+
   line-height: 1;
 }
 
@@ -368,9 +384,9 @@
 }
 
 .bar-name {
-  font-size: 12px;
-  font-weight: 500;
-  color: #374151;
+  font-size: 14px;
+  font-weight: 400;
+  color: rgba(3, 9, 41, 1);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
