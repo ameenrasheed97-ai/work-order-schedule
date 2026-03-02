@@ -124,7 +124,7 @@ work-order-schedule/
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/work-order-schedule.git
+git clone https://github.com/ameenrasheed97-ai/work-order-schedule.git
 cd work-order-schedule
 
 # Install dependencies
@@ -470,7 +470,8 @@ MIT License - Free for educational and commercial use
 
 ## 👤 Author
 
-Created for Naologic take-home challenge (March 2026)
+**Ameen Rasheed**  
+Created for take-home challenge (March 2026)
 
 ---
 
@@ -484,16 +485,36 @@ For issues or questions:
 
 ## ✅ Submission Checklist
 
+### Core Features
 - ✅ Core functionality (Day/Week/Month zoom)
 - ✅ Work order CRUD with validation
 - ✅ Overlap detection
 - ✅ Sample data (6 centers, 10+ orders, all statuses)
 - ✅ Unit tests (29 tests, all passing)
 - ✅ E2E tests (18 tests, all passing)
+
+### Bonus Features
 - ✅ BONUS: Hour zoom level
 - ✅ BONUS: localStorage persistence
 - ✅ BONUS: Comprehensive test suite
-- ✅ README.md (this file)
+- ✅ BONUS: README.md (this file)
+
+### Performance Optimizations
+- ✅ **Performance:** OnPush change detection strategy
+- ✅ **Performance:** trackBy functions for efficient list rendering
+
+### Accessibility (A11y) Checklist
+- ✅ A11y: ARIA labels on interactive elements
+- ✅ A11y: ARIA roles (dialog, button, banner, table, etc.)
+- ✅ A11y: Keyboard navigation (Tab, Escape, Enter)
+- ✅ A11y: Today button for quick date navigation
+- ✅ A11y: Semantic HTML (labels, form controls, headings)
+- ✅ A11y: Color contrast ratios (WCAG AA compliant)
+- ✅ A11y: Focus management and indicators
+- ✅ A11y: Screen reader support
+
+### Submission Status
+- ✅ Code complete and tested
 - ⏳ Demo video (Loom, 5-10 min)
 - ⏳ GitHub repository (public)
 
