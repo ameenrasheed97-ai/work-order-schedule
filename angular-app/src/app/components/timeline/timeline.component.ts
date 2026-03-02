@@ -37,7 +37,13 @@ export class TimelineComponent implements OnInit, OnDestroy {
   readonly zoomLevel   = this.svc.zoomLevel;
 
   readonly ROW_HEIGHT    = 52;
-  readonly TOTAL_COLUMNS = 120;
+  readonly INITIAL_COLUMNS = 300;
+  readonly LOAD_THRESHOLD = 40;
+  readonly ADD_COLUMNS = 60;
+
+  private prependedCount = 0;
+  private appendedCount = 0;
+  private scrollListener: ((e: Event) => void) | null = null;
 
   get COLUMN_WIDTH(): number {
     const zoom = this.zoomLevel();
@@ -84,13 +90,17 @@ export class TimelineComponent implements OnInit, OnDestroy {
     if (typeof document !== 'undefined') {
       document.addEventListener('click', this.onDocumentClick);
     }
-    setTimeout(() => this.scrollToToday(), 100);
+    setTimeout(() => {
+      this.setupScrollListener();
+      this.scrollToToday();
+    }, 100);
   }
 
   ngOnDestroy(): void {
     if (typeof document !== 'undefined') {
       document.removeEventListener('click', this.onDocumentClick);
     }
+    this.removeScrollListener();
   }
 
   private onDocumentClick = (e: MouseEvent) => {
@@ -101,13 +111,86 @@ export class TimelineComponent implements OnInit, OnDestroy {
     }
   };
 
+  private setupScrollListener(): void {
+    if (!this.scrollContainer) return;
+    const el = this.scrollContainer.nativeElement as HTMLElement;
+    this.scrollListener = () => this.onScrolling();
+    el.addEventListener('scroll', this.scrollListener, { passive: true });
+  }
+
+  private removeScrollListener(): void {
+    if (!this.scrollContainer || !this.scrollListener) return;
+    const el = this.scrollContainer.nativeElement as HTMLElement;
+    el.removeEventListener('scroll', this.scrollListener);
+    this.scrollListener = null;
+  }
+
+  private onScrolling(): void {
+    if (!this.scrollContainer) return;
+    const el = this.scrollContainer.nativeElement as HTMLElement;
+    const zoom = this.zoomLevel();
+
+    // Check if scrolling toward the start (left)
+    if (el.scrollLeft < this.LOAD_THRESHOLD * this.COLUMN_WIDTH) {
+      this.prependColumns(zoom);
+    }
+
+    // Check if scrolling toward the end (right)
+    const maxScroll = el.scrollWidth - el.clientWidth;
+    if (el.scrollLeft > maxScroll - this.LOAD_THRESHOLD * this.COLUMN_WIDTH) {
+      this.appendColumns(zoom);
+    }
+  }
+
+  private prependColumns(zoom: ZoomLevel): void {
+    // Only prepend if we haven't already recently
+    if (this.prependedCount >= 5) return;
+
+    const newStart = new Date(this.timelineStart);
+    if      (zoom === 'hour') newStart.setHours(newStart.getHours() - this.ADD_COLUMNS);
+    else if (zoom === 'day')  newStart.setDate(newStart.getDate() - this.ADD_COLUMNS);
+    else if (zoom === 'week') newStart.setDate(newStart.getDate() - this.ADD_COLUMNS * 7);
+    else                      newStart.setMonth(newStart.getMonth() - this.ADD_COLUMNS);
+
+    const newCols = this.svc.generateColumns(newStart, this.ADD_COLUMNS, zoom);
+    this.columns = [...newCols, ...this.columns];
+
+    // Adjust scroll position to maintain view
+    const el = this.scrollContainer.nativeElement as HTMLElement;
+    const scrollAdjust = this.ADD_COLUMNS * this.COLUMN_WIDTH;
+    el.scrollLeft += scrollAdjust;
+
+    this.timelineStart = newStart;
+    this.prependedCount++;
+    this.cdr.markForCheck();
+  }
+
+  private appendColumns(zoom: ZoomLevel): void {
+    // Only append if we haven't already recently
+    if (this.appendedCount >= 5) return;
+
+    const lastCol = this.columns[this.columns.length - 1];
+    const newStart = new Date(lastCol);
+    
+    if      (zoom === 'hour') newStart.setHours(newStart.getHours() + 1);
+    else if (zoom === 'day')  newStart.setDate(newStart.getDate() + 1);
+    else if (zoom === 'week') newStart.setDate(newStart.getDate() + 7);
+    else                      newStart.setMonth(newStart.getMonth() + 1);
+
+    const newCols = this.svc.generateColumns(newStart, this.ADD_COLUMNS, zoom);
+    this.columns = [...this.columns, ...newCols];
+
+    this.appendedCount++;
+    this.cdr.markForCheck();
+  }
+
   rebuildTimeline(): void {
     const zoom = this.zoomLevel();
 
-    const buffer = zoom === 'hour' ? 24
-                 : zoom === 'day'  ? 20
-                 : zoom === 'week' ? 8
-                 : 4;
+    const buffer = zoom === 'hour' ? 48
+                 : zoom === 'day'  ? 40
+                 : zoom === 'week' ? 16
+                 : 8;
 
     this.timelineStart = new Date();
 
@@ -122,12 +205,14 @@ export class TimelineComponent implements OnInit, OnDestroy {
       this.timelineStart.setMinutes(0, 0, 0);
     }
 
-    this.columns = this.svc.generateColumns(this.timelineStart, this.TOTAL_COLUMNS, zoom);
+    this.columns = this.svc.generateColumns(this.timelineStart, this.INITIAL_COLUMNS, zoom);
+    this.prependedCount = 0;
+    this.appendedCount = 0;
     this.cdr.markForCheck();
   }
 
   get totalTimelineWidth(): number {
-    return this.TOTAL_COLUMNS * this.COLUMN_WIDTH;
+    return this.columns.length * this.COLUMN_WIDTH;
   }
 
   formatColumn(date: Date): string {
@@ -164,8 +249,12 @@ export class TimelineComponent implements OnInit, OnDestroy {
 
   onZoomChange(zoom: string): void {
     this.svc.setZoomLevel(zoom as ZoomLevel);
+    this.removeScrollListener();
     this.rebuildTimeline();
-    setTimeout(() => this.scrollToToday(), 50);
+    setTimeout(() => {
+      this.setupScrollListener();
+      this.scrollToToday();
+    }, 50);
   }
 
   scrollToToday(): void {
