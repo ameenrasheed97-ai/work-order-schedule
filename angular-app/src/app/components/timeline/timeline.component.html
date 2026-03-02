@@ -62,7 +62,7 @@
                        : zoomLevel() === 'week' ? 'week'
                        : 'month' }}
             </span>
-            <span class="header-cell-label">{{ formatColumn(col) }}</span>
+            <span class="header-cell-label" [style.fontSize.px]="zoomLevel() === 'week' ? 11 : 14">{{ formatColumn(col) }}</span>
           </div>
         </div>
 
